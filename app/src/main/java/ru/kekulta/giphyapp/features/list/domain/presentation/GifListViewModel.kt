@@ -1,9 +1,8 @@
 package ru.kekulta.giphyapp.features.list.domain.presentation
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +12,7 @@ import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.di.MainServiceLocator
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchRequest
 import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
+import ru.kekulta.giphyapp.features.list.domain.models.GifListState
 import ru.kekulta.giphyapp.features.pager.ui.GifPagerFragment
 import ru.kekulta.giphyapp.shared.data.models.Gif
 import ru.kekulta.giphyapp.shared.data.models.Resource
@@ -20,25 +20,64 @@ import ru.kekulta.giphyapp.shared.navigation.api.Command
 
 class GifListViewModel(private val gifRepository: GifRepository) : ViewModel() {
 
-    private val _gifList = MutableLiveData<List<Gif>>()
-    val gifList: LiveData<List<Gif>> = _gifList
-    var recyclerState: Parcelable? = null
+    private val gifList = MutableLiveData<List<Gif>>(emptyList())
+    private val currentQuery = MutableLiveData<String?>(null)
+    private val currentPage = MutableLiveData<Int>(0)
+    private val pagesTotal = MutableLiveData<Int>(0)
+    private val state = MutableLiveData(GifListState.State.EMPTY)
+
+    private val _gifListState =
+        MediatorLiveData(GifListState(currentState = GifListState.State.EMPTY))
+    val gifListState = _gifListState
 
 
     init {
+        _gifListState.addSource(gifList) {
+            _gifListState.value = requireNotNull(_gifListState.value?.copy(gifList = it)) {
+                "State couldn't be null"
+            }
+        }
+        _gifListState.addSource(currentQuery) {
+            _gifListState.value = requireNotNull(_gifListState.value?.copy(query = it)) {
+                "State couldn't be null"
+            }
+        }
+        _gifListState.addSource(currentPage) {
+            _gifListState.value = requireNotNull(_gifListState.value?.copy(currentPage = it)) {
+                "State couldn't be null"
+            }
+        }
+        _gifListState.addSource(pagesTotal) {
+            _gifListState.value = requireNotNull(_gifListState.value?.copy(pagesTotal = it)) {
+                "State couldn't be null"
+            }
+        }
+        _gifListState.addSource(state) {
+            _gifListState.value = requireNotNull(_gifListState.value?.copy(currentState = it)) {
+                "State couldn't be null"
+            }
+        }
         fetchGifsByQuery("cats")
     }
 
     private fun fetchGifsByQuery(query: String, offset: Int = 0) {
+        state.postValue(GifListState.State.LOADING)
+        currentQuery.postValue(query)
+
         viewModelScope.launch {
             val result = gifRepository.searchGifs(GifSearchRequest(query, offset))
             when (result) {
                 is Resource.Success -> {
-                    _gifList.postValue(result.data.gifList)
+                    gifList.postValue(result.data.gifList)
+                    if (result.data.gifList.isEmpty()) {
+                        state.postValue(GifListState.State.EMPTY)
+                    } else {
+                        state.postValue(GifListState.State.CONTENT)
+                    }
                 }
 
                 is Resource.Error -> {
-                    // TODO
+                    state.postValue(GifListState.State.ERROR)
                 }
             }
 

@@ -44,12 +44,12 @@ class GifRepositoryImpl(private val networkClient: NetworkClient) : GifRepositor
                         urlDownsized = urlDownsized
                     )
                 }
-//                val pagination = Pagination(
-//                    response.pagination.offset,
-//                    response.pagination.totalCount,
-//                    response.pagination.count
-//                )
-                result = GifSearchResponse(data, Pagination(0, 0, 0))
+                val pagination = Pagination(
+                    response.pagination.offset,
+                    response.pagination.totalCount,
+                    response.pagination.count
+                )
+                result = GifSearchResponse(data, pagination)
             }
         }
         result.let {

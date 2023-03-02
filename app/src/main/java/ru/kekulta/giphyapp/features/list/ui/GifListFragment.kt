@@ -12,6 +12,7 @@ import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.FragmentListBinding
+import ru.kekulta.giphyapp.features.list.domain.models.GifListState
 import ru.kekulta.giphyapp.features.list.domain.presentation.GifListViewModel
 
 class GifListFragment : Fragment(R.layout.fragment_list) {
@@ -56,8 +57,36 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
             rv.addItemDecoration(ListItemDecoration(10))
         }
 
-        viewModel.gifList.observe(viewLifecycleOwner) { gifList ->
-            adapter.gifList = gifList
+        viewModel.gifListState.observe(viewLifecycleOwner) { currentState ->
+            when (currentState.currentState) {
+                GifListState.State.CONTENT -> {
+                    adapter.gifList = currentState.gifList ?: emptyList()
+                    binding.gifRecyclerView.visibility = View.VISIBLE
+                    binding.info.visibility = View.INVISIBLE
+                    binding.searchBar.text = currentState.query ?: ""
+                }
+
+                GifListState.State.EMPTY -> {
+                    binding.gifRecyclerView.visibility = View.GONE
+                    binding.info.text = "EMPTY"
+                    binding.info.visibility = View.VISIBLE
+                    binding.searchBar.text = currentState.query ?: ""
+                }
+
+                GifListState.State.LOADING -> {
+                    binding.gifRecyclerView.visibility = View.GONE
+                    binding.info.text = "LOADING"
+                    binding.info.visibility = View.VISIBLE
+                    binding.searchBar.text = currentState.query ?: ""
+                }
+
+                GifListState.State.ERROR -> {
+                    binding.gifRecyclerView.visibility = View.GONE
+                    binding.info.text = "ERROR"
+                    binding.info.visibility = View.VISIBLE
+                    binding.searchBar.text = currentState.query ?: ""
+                }
+            }
         }
     }
 

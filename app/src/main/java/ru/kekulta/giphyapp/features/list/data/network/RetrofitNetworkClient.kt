@@ -18,7 +18,7 @@ class RetrofitNetworkClient : NetworkClient {
     private val giphyService = retrofit.create(GiphyApi::class.java)
     override suspend fun doRequest(dto: Any): Response {
         return if (dto is GifSearchRequest) {
-            val resp = giphyService.searchGif(dto.query)
+            val resp = giphyService.searchGif(dto.query, dto.offset)
             val body = resp.body() ?: Response()
             body.apply { resultCode = resp.code() }
         } else {

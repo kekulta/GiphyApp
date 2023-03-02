@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,18 +9,18 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:overScrollMode="ifContentScrolls"
             app:layout_behavior="@string/searchbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <View
@@ -32,6 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:nestedScrollingEnabled="false" />
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
@@ -54,8 +55,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="hint"
-            app:layout_anchor="@id/search_bar"></com.google.android.material.search.SearchView>
+            app:layout_anchor="@id/search_bar" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-</LinearLayout>
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="?colorOnSurface"
+        android:visibility="invisible" />
+</FrameLayout>
