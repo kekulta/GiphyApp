@@ -5,4 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-data class Gif(val id: String, val url: String, val width: Int, val height: Int) : Parcelable
+data class Gif(
+    val id: String,
+    val width: Int,
+    val height: Int,
+    val urlPreview: String?,
+    val urlOriginal: String?,
+    val urlDownsized: String?,
+) : Parcelable

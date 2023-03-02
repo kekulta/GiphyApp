@@ -11,9 +11,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.di.MainServiceLocator
+import ru.kekulta.giphyapp.features.list.data.dto.GifSearchRequest
 import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
-import ru.kekulta.giphyapp.features.pager.GifPagerFragment
+import ru.kekulta.giphyapp.features.pager.ui.GifPagerFragment
 import ru.kekulta.giphyapp.shared.data.models.Gif
+import ru.kekulta.giphyapp.shared.data.models.Resource
 import ru.kekulta.giphyapp.shared.navigation.api.Command
 
 class GifListViewModel(private val gifRepository: GifRepository) : ViewModel() {
@@ -27,9 +29,19 @@ class GifListViewModel(private val gifRepository: GifRepository) : ViewModel() {
         fetchGifsByQuery("cats")
     }
 
-    private fun fetchGifsByQuery(query: String) {
+    private fun fetchGifsByQuery(query: String, offset: Int = 0) {
         viewModelScope.launch {
-            _gifList.postValue(gifRepository.searchGifs(query))
+            val result = gifRepository.searchGifs(GifSearchRequest(query, offset))
+            when (result) {
+                is Resource.Success -> {
+                    _gifList.postValue(result.data.gifList)
+                }
+
+                is Resource.Error -> {
+                    // TODO
+                }
+            }
+
         }
     }
 

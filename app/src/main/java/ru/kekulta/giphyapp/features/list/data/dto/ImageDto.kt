@@ -1,4 +1,4 @@
-package ru.kekulta.giphyapp.shared.data.dto
+package ru.kekulta.giphyapp.features.list.data.dto
 
 import com.google.gson.annotations.SerializedName
 

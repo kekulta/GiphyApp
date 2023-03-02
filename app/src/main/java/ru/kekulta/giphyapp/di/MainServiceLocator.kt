@@ -3,7 +3,7 @@ package ru.kekulta.giphyapp.di
 import ru.kekulta.giphyapp.features.list.data.GifRepositoryImpl
 import ru.kekulta.giphyapp.features.list.data.NetworkClient
 import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
-import ru.kekulta.giphyapp.features.list.data.network.RetrofitGiphyNetworkClient
+import ru.kekulta.giphyapp.features.list.data.network.RetrofitNetworkClient
 import ru.kekulta.giphyapp.shared.navigation.AppRouter
 import ru.kekulta.giphyapp.shared.navigation.api.Router
 
@@ -30,7 +30,7 @@ object MainServiceLocator {
 
     private fun provideNetworkClient(): NetworkClient {
         if (networkClient == null) {
-            networkClient = RetrofitGiphyNetworkClient()
+            networkClient = RetrofitNetworkClient()
         }
         return networkClient!!
     }

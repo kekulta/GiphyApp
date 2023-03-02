@@ -1,4 +1,4 @@
-package ru.kekulta.giphyapp.features.main
+package ru.kekulta.giphyapp.shared.navigation.api
 
 import androidx.annotation.AnimRes
 

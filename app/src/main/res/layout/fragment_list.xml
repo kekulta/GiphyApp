@@ -15,6 +15,7 @@
             android:id="@+id/nestedScroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             app:layout_behavior="@string/searchbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -29,7 +30,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/gifRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false" />
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
@@ -52,8 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="hint"
-            app:layout_anchor="@id/search_bar">
-        </com.google.android.material.search.SearchView>
+            app:layout_anchor="@id/search_bar"></com.google.android.material.search.SearchView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

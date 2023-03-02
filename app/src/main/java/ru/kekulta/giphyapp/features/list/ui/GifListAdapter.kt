@@ -3,12 +3,8 @@ package ru.kekulta.giphyapp.features.list.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.recyclerview.widget.RecyclerView
-import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.ListItemGifBinding
-import ru.kekulta.giphyapp.features.main.MainActivity
-import ru.kekulta.giphyapp.features.pager.GifPagerFragment
 import ru.kekulta.giphyapp.shared.data.models.Gif
 
 class GifListAdapter(val fragment: Fragment) : RecyclerView.Adapter<GifListViewHolder>(),

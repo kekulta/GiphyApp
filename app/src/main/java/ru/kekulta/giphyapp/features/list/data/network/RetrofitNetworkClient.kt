@@ -3,11 +3,11 @@ package ru.kekulta.giphyapp.features.list.data.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.kekulta.giphyapp.features.list.data.NetworkClient
-import ru.kekulta.giphyapp.shared.data.dto.GifSearchRequest
-import ru.kekulta.giphyapp.shared.data.dto.Response
+import ru.kekulta.giphyapp.features.list.data.dto.GifSearchRequest
+import ru.kekulta.giphyapp.features.list.data.dto.Response
 import ru.kekulta.giphyapp.shared.utils.HTTTPCodes
 
-class RetrofitGiphyNetworkClient : NetworkClient {
+class RetrofitNetworkClient : NetworkClient {
     private val giphyBaseUrl = "https://api.giphy.com"
 
     private val retrofit = Retrofit.Builder()

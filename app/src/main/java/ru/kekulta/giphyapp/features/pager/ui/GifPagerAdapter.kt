@@ -1,4 +1,4 @@
-package ru.kekulta.giphyapp.features.pager
+package ru.kekulta.giphyapp.features.pager.ui
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter

@@ -1,7 +1,6 @@
 package ru.kekulta.giphyapp.shared.navigation.api
 
 import android.os.Bundle
-import ru.kekulta.giphyapp.features.main.Animation
 
 data class Transition(
     val tag: String,

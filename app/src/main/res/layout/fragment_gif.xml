@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.pager.GifFragment">
+    tools:context=".features.pager.ui.GifFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+       />
 
 </FrameLayout>
