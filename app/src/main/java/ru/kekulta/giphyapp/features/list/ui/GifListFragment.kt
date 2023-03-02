@@ -2,15 +2,11 @@ package ru.kekulta.giphyapp.features.list.ui
 
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.SharedElementCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -29,9 +25,23 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+        // TODO do something with animations
+        val animationInflater = TransitionInflater.from(context)
+        enterTransition =
+            animationInflater.inflateTransition(R.transition.fade).addTarget(binding.root)
+        exitTransition = animationInflater.inflateTransition(R.transition.fade)
+        reenterTransition =
+            animationInflater.inflateTransition(R.transition.fade).addTarget(binding.root)
+
+        binding.searchView.editText.setOnEditorActionListener { _, _, _ ->
+            binding.searchBar.text = binding.searchView.text
+            binding.searchView.hide()
+            viewModel.searchInput(binding.searchView.text.toString())
+            false
+        }
+
         return binding.root
     }
 
@@ -51,22 +61,6 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.recyclerState?.let {
-            binding.gifRecyclerView.layoutManager?.onRestoreInstanceState(it)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.fetchGifsByQuery("cats")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.recyclerState = binding.gifRecyclerView.layoutManager?.onSaveInstanceState()
-    }
 
     companion object {
         const val LOG_TAG = "GifListFragment"

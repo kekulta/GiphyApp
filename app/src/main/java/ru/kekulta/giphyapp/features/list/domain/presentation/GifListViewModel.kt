@@ -15,7 +15,6 @@ import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
 import ru.kekulta.giphyapp.features.pager.GifPagerFragment
 import ru.kekulta.giphyapp.shared.data.models.Gif
 import ru.kekulta.giphyapp.shared.navigation.api.Command
-import java.util.ServiceLoader
 
 class GifListViewModel(private val gifRepository: GifRepository) : ViewModel() {
 
@@ -23,10 +22,19 @@ class GifListViewModel(private val gifRepository: GifRepository) : ViewModel() {
     val gifList: LiveData<List<Gif>> = _gifList
     var recyclerState: Parcelable? = null
 
-    fun fetchGifsByQuery(query: String) {
+
+    init {
+        fetchGifsByQuery("cats")
+    }
+
+    private fun fetchGifsByQuery(query: String) {
         viewModelScope.launch {
             _gifList.postValue(gifRepository.searchGifs(query))
         }
+    }
+
+    fun searchInput(query: String) {
+        fetchGifsByQuery(query)
     }
 
     fun cardClicked(adapterPosition: Int) {

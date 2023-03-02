@@ -2,6 +2,7 @@ package ru.kekulta.giphyapp.features.pager
 
 import android.os.Build
 import android.os.Bundle
+import android.transition.TransitionInflater
 
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,11 @@ class GifPagerFragment : Fragment(R.layout.fragment_pager_gif) {
     ): View {
         viewPager.adapter = adapter
         viewPager.currentItem = arguments?.getInt(INITIAL_ITEM) ?: 0
+
+        val inflater = TransitionInflater.from(context)
+        enterTransition =
+            inflater.inflateTransition(R.transition.slide_bottom).addTarget(binding.root)
+        returnTransition = inflater.inflateTransition(R.transition.slide_bottom)
 
         return viewPager
     }

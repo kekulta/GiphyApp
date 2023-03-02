@@ -1,5 +1,6 @@
 package ru.kekulta.giphyapp.features.main
 
+import android.app.slice.Slice
 import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
@@ -23,9 +24,10 @@ class MainNavigator(
         when (command) {
             is Command.CommandForwardTo -> {
                 fragmentManager.commit {
+                    setReorderingAllowed(true)
                     if (!noAnimation) {
                         provideAnimation(command.screen)?.let {
-                            setCustomAnimations(it.enter, it.exit, it.popEnter, it.popExit)
+                            //setCustomAnimations(it.enter, it.exit, it.popEnter, it.popExit)
                         }
                     }
                     replace(container, provideFragment(command.screen, command.args))

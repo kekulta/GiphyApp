@@ -39,6 +39,7 @@ class GifListViewHolder(
 
         Glide.with(binding.gifIv.context)
             .asGif()
+            //.asBitmap()
             .load(gif.url)
             .override(gif.width, gif.height)
             .placeholder(circularProgressDrawable)
