@@ -17,32 +17,31 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.FragmentListBinding
 import ru.kekulta.giphyapp.features.list.domain.presentation.GifListViewModel
-import ru.kekulta.giphyapp.features.main.MainActivity
-import ru.kekulta.giphyapp.features.pager.GifPagerFragment
 
 class GifListFragment : Fragment(R.layout.fragment_list) {
 
     private val binding: FragmentListBinding by viewBinding(createMethod = CreateMethod.INFLATE)
-    private val adapter = GifListAdapter(this)
     private val viewModel: GifListViewModel by viewModels({ requireActivity() }) { GifListViewModel.Factory }
+    private val adapter = GifListAdapter(this).apply {
+        setAdapterClickListener {
+            viewModel.cardClicked(it)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        prepareTransitions()
-        postponeEnterTransition()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.gifRecyclerView.also { rv ->
-//            rv.layoutManager =
-//                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL).apply {
-//                    gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
-//                }
-            rv.layoutManager = GridLayoutManager(context, 2)
+            rv.layoutManager =
+                StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL).apply {
+                    gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+                }
             rv.adapter = adapter
             rv.addItemDecoration(ListItemDecoration(10))
         }
@@ -50,7 +49,6 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
         viewModel.gifList.observe(viewLifecycleOwner) { gifList ->
             adapter.gifList = gifList
         }
-        //scrollToPosition()
     }
 
     override fun onResume() {
@@ -68,70 +66,6 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
     override fun onPause() {
         super.onPause()
         viewModel.recyclerState = binding.gifRecyclerView.layoutManager?.onSaveInstanceState()
-    }
-
-    private fun scrollToPosition() {
-        binding.gifRecyclerView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-            override fun onLayoutChange(
-                v: View,
-                left: Int,
-                top: Int,
-                right: Int,
-                bottom: Int,
-                oldLeft: Int,
-                oldTop: Int,
-                oldRight: Int,
-                oldBottom: Int
-            ) {
-                binding.gifRecyclerView.removeOnLayoutChangeListener(this)
-                val layoutManager = binding.gifRecyclerView.layoutManager
-                val viewAtPosition =
-                    layoutManager!!.findViewByPosition(MainActivity.currentPosition)
-                if (viewAtPosition == null || layoutManager
-                        .isViewPartiallyVisible(viewAtPosition, false, true)
-                ) {
-                    binding.gifRecyclerView.post { layoutManager.scrollToPosition(MainActivity.currentPosition) }
-                }
-            }
-        })
-    }
-
-
-    /**
-     * Prepares the shared element transition to the pager fragment, as well as the other transitions
-     * that affect the flow.
-     */
-    private fun prepareTransitions() {
-        exitTransition = TransitionInflater.from(context)
-            .inflateTransition(R.transition.grid_exit_transition)
-
-
-        // A similar mapping is set at the ImagePagerFragment with a setEnterSharedElementCallback.
-        setExitSharedElementCallback(
-            object : SharedElementCallback() {
-                override fun onMapSharedElements(
-                    names: List<String>,
-                    sharedElements: MutableMap<String, View>
-                ) {
-                    Log.d(GifPagerFragment.LOG_TAG, "Exit callback")
-
-
-                    // Locate the ViewHolder for the clicked position.
-                    val selectedViewHolder = binding.gifRecyclerView
-                        .findViewHolderForAdapterPosition(MainActivity.currentPosition) ?: return
-                    Log.d(GifPagerFragment.LOG_TAG, "SelectedViewHolder: ${selectedViewHolder}")
-
-                    // Map the first shared element name to the child ImageView.
-                    sharedElements[names[0]] =
-                        selectedViewHolder.itemView.findViewById(R.id.gifIv)
-
-                    Log.d(
-                        LOG_TAG,
-                        "names[0]: ${names[0]}, sharedElements[names[0]]: ${sharedElements[names[0]]}"
-                    )
-
-                }
-            })
     }
 
     companion object {

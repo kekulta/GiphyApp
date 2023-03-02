@@ -6,8 +6,11 @@ import androidx.fragment.app.commit
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.ActivityMainBinding
+import ru.kekulta.giphyapp.di.MainServiceLocator
 
 import ru.kekulta.giphyapp.features.list.ui.GifListFragment
+import ru.kekulta.giphyapp.shared.navigation.api.Command
+import ru.kekulta.giphyapp.shared.navigation.api.Router
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -17,18 +20,29 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        supportFragmentManager.commit {
-            replace(R.id.container, GifListFragment::class.java, null)
-        }
+
 
         binding.Tv.text = "new text act"
 
     }
 
+    override fun onResume() {
+        MainServiceLocator.getRouter()
+            .attachNavigator(MainNavigator(supportFragmentManager, R.id.container))
+        MainServiceLocator.getRouter().navigate(Command.CommandForwardTo("Initial", "list"))
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MainServiceLocator.getRouter().detachNavigator()
+    }
+
+    override fun onBackPressed() {
+        MainServiceLocator.getRouter().navigate(Command.CommandBack)
+    }
+
     companion object {
         const val LOG_TAG = "MainActivity"
-
-        // TODO implement navigation
-        var currentPosition = 0
     }
 }
