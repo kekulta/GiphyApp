@@ -2,10 +2,7 @@ package ru.kekulta.giphyapp.features.list.domain.presentation
 
 import android.os.Bundle
 import android.util.Log
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.launch
@@ -27,8 +24,10 @@ class GifListViewModel(private val gifRepository: GifRepository) : ViewModel() {
     private val state = MutableLiveData(GifListState.State.EMPTY)
 
     private val _gifListState =
-        MediatorLiveData(GifListState(currentState = GifListState.State.EMPTY))
-    val gifListState = _gifListState
+        MediatorLiveData<GifListState>().apply {
+            value = GifListState(currentState = GifListState.State.EMPTY)
+        }
+    val gifListState: LiveData<GifListState> = _gifListState
 
 
     init {
