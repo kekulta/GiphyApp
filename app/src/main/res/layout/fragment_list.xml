@@ -43,11 +43,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <com.google.android.material.search.SearchBar
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="hint" />
+
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.search.SearchView

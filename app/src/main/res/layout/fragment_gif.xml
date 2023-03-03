@@ -1,15 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentGif"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.pager.ui.GifFragment">
+    tools:context=".features.search.pager.ui.GifFragment">
 
-
-    <ImageView
-        android:id="@+id/image"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-       />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp">
 
-</FrameLayout>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?colorSurfaceVariant"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp">
+
+                    <ImageView
+                        android:id="@+id/image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/gifUserTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical|start"
+                        android:text="User"
+                        android:textColor="?colorOnSurfaceVariant"
+                        android:textSize="20sp"
+                        android:visibility="gone"
+                        app:drawableStartCompat="@drawable/compound_placeholder" />
+
+                    <TextView
+                        android:id="@+id/gifTitleTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="20dp"
+                        android:text="Happy Dancing GIF"
+                        android:textAlignment="textStart"
+                        android:textColor="?colorOnSurfaceVariant"
+                        android:textSize="15sp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/gifShareButton"
+                        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Share"
+                        android:visibility="gone"
+                        app:icon="@drawable/share" />
+
+                    <Button
+                        android:id="@+id/gifLinkButton"
+                        style="?attr/materialIconButtonStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTint="?colorOnSurfaceVariant"
+                        android:visibility="gone"
+                        app:icon="@drawable/copy_link"
+                        app:iconTint="?colorOnSurfaceVariant" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+</ScrollView>

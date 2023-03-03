@@ -12,4 +12,7 @@ data class Gif(
     val urlPreview: String?,
     val urlOriginal: String?,
     val urlDownsized: String?,
+    val user: User?,
+    val title: String?,
+    val contentDescription: String?
 ) : Parcelable

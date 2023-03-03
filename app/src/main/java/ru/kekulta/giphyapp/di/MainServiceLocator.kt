@@ -1,9 +1,10 @@
 package ru.kekulta.giphyapp.di
 
-import ru.kekulta.giphyapp.features.list.data.GifRepositoryImpl
-import ru.kekulta.giphyapp.features.list.data.NetworkClient
-import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
-import ru.kekulta.giphyapp.features.list.data.network.RetrofitNetworkClient
+
+
+import ru.kekulta.giphyapp.features.search.list.data.NetworkClient
+import ru.kekulta.giphyapp.features.search.list.data.network.RetrofitNetworkClient
+import ru.kekulta.giphyapp.features.search.list.domain.api.GifRepository
 import ru.kekulta.giphyapp.shared.navigation.AppRouter
 import ru.kekulta.giphyapp.shared.navigation.api.Router
 
@@ -23,7 +24,9 @@ object MainServiceLocator {
 
     fun provideGifRepository(): GifRepository {
         if (gifRepository == null) {
-            gifRepository = GifRepositoryImpl(provideNetworkClient())
+            gifRepository = ru.kekulta.giphyapp.features.search.list.data.GifRepositoryImpl(
+                provideNetworkClient()
+            )
         }
         return gifRepository!!
     }
