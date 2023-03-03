@@ -4,6 +4,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchResponseDto
+import ru.kekulta.giphyapp.features.list.domain.models.PaginationState.Companion.ITEMS_ON_PAGE
 
 
 interface GiphyApi {
@@ -11,7 +12,7 @@ interface GiphyApi {
     suspend fun searchGif(
         @Query("q") query: String,
         @Query("offset") offset: Int,
-        @Query("limit") limit: Int = 25,
+        @Query("limit") limit: Int = ITEMS_ON_PAGE,
         @Query("api_key") key: String = "NJhjiU6444yPb5Mwk2KAj5Do8iCVvac3",
     ): Response<GifSearchResponseDto>
 }

@@ -3,17 +3,21 @@ package ru.kekulta.giphyapp.features.main.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.viewModels
+import androidx.core.view.isEmpty
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.ActivityMainBinding
 import ru.kekulta.giphyapp.di.MainServiceLocator
 
-import ru.kekulta.giphyapp.features.main.MainNavigator
+import ru.kekulta.giphyapp.features.main.domain.MainNavigator
+import ru.kekulta.giphyapp.features.main.domain.presentation.MainViewModel
 import ru.kekulta.giphyapp.shared.navigation.api.Command
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val binding: ActivityMainBinding by viewBinding()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +37,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onResume() {
         MainServiceLocator.getRouter()
             .attachNavigator(MainNavigator(this, supportFragmentManager, R.id.container))
-        MainServiceLocator.getRouter().navigate(Command.CommandForwardTo("Initial", "list"))
+        viewModel.onResume()
         super.onResume()
     }
 

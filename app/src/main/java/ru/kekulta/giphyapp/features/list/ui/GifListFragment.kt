@@ -58,38 +58,55 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
             rv.adapter = adapter
             rv.addItemDecoration(ListItemDecoration(10))
         }
+
+
         viewModel.gifListState.observe(viewLifecycleOwner) { currentState ->
             Log.d(LOG_TAG, "State observed: ${currentState.currentState}")
             when (currentState.currentState) {
                 GifListState.State.CONTENT -> {
                     adapter.gifList = currentState.paginationState.gifList
                     binding.gifRecyclerView.visibility = View.VISIBLE
+                    binding.backButton.visibility = View.VISIBLE
+                    binding.forwardButton.visibility = View.VISIBLE
+                    binding.pageCounter.visibility = View.VISIBLE
                     binding.info.visibility = View.INVISIBLE
                     binding.searchBar.text = currentState.query ?: ""
+                    binding.pageCounter.text = getString(
+                        R.string.page_counter_format,
+                        currentState.paginationState.currentPage,
+                        currentState.paginationState.pagesTotal - 1
+                    )
+                    binding.backButton.isEnabled = currentState.paginationState.currentPage != 1
+                    binding.forwardButton.isEnabled =
+                        currentState.paginationState.currentPage != currentState.paginationState.pagesTotal
+
+                    binding.backButton.setOnClickListener {
+                        viewModel.prevPageButtonClicked()
+                    }
+                    binding.forwardButton.setOnClickListener {
+                        viewModel.nextPageButtonClicked()
+                    }
+
                 }
 
-                GifListState.State.EMPTY -> {
+                GifListState.State.EMPTY, GifListState.State.LOADING, GifListState.State.ERROR -> {
                     binding.gifRecyclerView.visibility = View.GONE
-                    binding.info.text = "EMPTY"
+                    binding.backButton.visibility = View.GONE
+                    binding.forwardButton.visibility = View.GONE
+                    binding.pageCounter.visibility = View.GONE
                     binding.info.visibility = View.VISIBLE
                     binding.searchBar.text = currentState.query ?: ""
-                }
 
-                GifListState.State.LOADING -> {
-                    binding.gifRecyclerView.visibility = View.GONE
-                    binding.info.text = "LOADING"
-                    binding.info.visibility = View.VISIBLE
-                    binding.searchBar.text = currentState.query ?: ""
-                }
-
-                GifListState.State.ERROR -> {
-                    binding.gifRecyclerView.visibility = View.GONE
-                    binding.info.text = "ERROR"
-                    binding.info.visibility = View.VISIBLE
-                    binding.searchBar.text = currentState.query ?: ""
+                    binding.info.text = when (currentState.currentState) {
+                        GifListState.State.EMPTY -> "EMPTY"
+                        GifListState.State.LOADING -> "LOADING"
+                        GifListState.State.ERROR -> "ERROR"
+                        GifListState.State.CONTENT -> "HERE SHOULD BE CONTENT BUT SOMETHING WENT WRONG"
+                    }
                 }
             }
         }
+
     }
 
 

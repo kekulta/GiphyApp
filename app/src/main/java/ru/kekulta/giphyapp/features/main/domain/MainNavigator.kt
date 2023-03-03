@@ -1,4 +1,4 @@
-package ru.kekulta.giphyapp.features.main
+package ru.kekulta.giphyapp.features.main.domain
 
 import android.app.Activity
 import android.app.slice.Slice
