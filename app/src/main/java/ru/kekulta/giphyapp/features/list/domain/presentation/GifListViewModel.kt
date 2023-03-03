@@ -86,9 +86,10 @@ class GifListViewModel(
 
                     val currentPage =
                         (result.data.pagination.count + result.data.pagination.offset) / ITEMS_ON_PAGE +
-                                (result.data.pagination.count + result.data.pagination.offset) % ITEMS_ON_PAGE
+                                if ((result.data.pagination.count + result.data.pagination.offset) % ITEMS_ON_PAGE > 0) 1 else 0
                     val pagesTotal =
-                        (result.data.pagination.totalCount) / ITEMS_ON_PAGE + (result.data.pagination.totalCount) % ITEMS_ON_PAGE
+                        (result.data.pagination.totalCount) / ITEMS_ON_PAGE +
+                                if ((result.data.pagination.totalCount) % ITEMS_ON_PAGE > 0) 1 else 0
                     if (result.data.pagination.count == 0) {
                         state.postValue(GifListState.State.EMPTY)
                     }

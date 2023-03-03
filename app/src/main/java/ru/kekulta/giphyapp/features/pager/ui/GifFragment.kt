@@ -1,34 +1,42 @@
 package ru.kekulta.giphyapp.features.pager.ui
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.FileProvider.getUriForFile
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.FragmentGifBinding
 import ru.kekulta.giphyapp.shared.data.models.Gif
 import ru.kekulta.goodjobray.shared.data.utils.dp
+import java.io.*
+import java.nio.ByteBuffer
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
 
 private const val ARG_GIF = "param1"
 
@@ -82,6 +90,36 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
+
+                    binding.gifShareButton.setOnClickListener {
+                        val byteBuffer = (binding.image.drawable as GifDrawable).buffer
+                        lifecycleScope.launch(Dispatchers.IO) {
+
+
+                            val gifFile =
+                                Glide.with(requireContext()).asFile().load(gif!!.urlPreview)
+                                    .submit().get()
+
+                            val secondFile = File(requireContext().filesDir, "${gif?.title ?: "giphy"}.gif")
+
+
+                            gifFile.copyTo(secondFile, true)
+
+
+                            val uri: Uri =
+                                getUriForFile(requireContext(), "ru.kekulta.provider", secondFile)
+
+
+                            val shareIntent: Intent = Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_STREAM, uri)
+                                type = "video/gif"
+                            }
+                            startActivity(Intent.createChooser(shareIntent, null))
+
+                        }
+                    }
+
                     binding.gifShareButton.isVisible = true
                     return false
                 }
@@ -140,10 +178,14 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
 
         }
 
+
+
         return binding.root
     }
 
     companion object {
+        const val LOG_TAG = "GifFragment"
+
         @JvmStatic
         fun newInstance(gif: Gif) =
             GifFragment().apply {
