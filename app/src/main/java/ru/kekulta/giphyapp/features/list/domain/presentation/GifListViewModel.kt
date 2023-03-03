@@ -45,8 +45,12 @@ class GifListViewModel(
     init {
         _gifListState.addSource(
             paginationInteractor.observePaginationState().asLiveData(Dispatchers.Main)
-        ) { state ->
-            _gifListState.postValue(gifListStateValue.copy(paginationState = state))
+        ) { _state ->
+            _gifListState.value = gifListStateValue.copy(paginationState = _state)
+
+            if (_state.gifList.isNotEmpty()) {
+                state.postValue(GifListState.State.CONTENT)
+            }
         }
 
         _gifListState.addSource(currentQuery) {
@@ -74,11 +78,8 @@ class GifListViewModel(
                     paginationInteractor.setPaginationState(paginationState.copy(gifList = result.data.gifList))
                     if (result.data.gifList.isEmpty()) {
                         state.postValue(GifListState.State.EMPTY)
-                    } else {
-                        state.postValue(GifListState.State.CONTENT)
                     }
                 }
-
                 is Resource.Error -> {
                     state.postValue(GifListState.State.ERROR)
                 }
@@ -92,15 +93,10 @@ class GifListViewModel(
     }
 
     fun cardClicked(adapterPosition: Int) {
+        paginationInteractor.setPaginationState(paginationState.copy(currentItem = adapterPosition))
 
         MainServiceLocator.getRouter()
-            .navigate(Command.CommandForwardTo("Details", "list/details", Bundle().apply {
-                putParcelableArray(
-                    GifPagerFragment.GIF_LIST,
-                    gifListStateValue.paginationState.gifList.toTypedArray()
-                )
-                putInt(GifPagerFragment.INITIAL_ITEM, adapterPosition)
-            }))
+            .navigate(Command.CommandForwardTo("Details", "list/details"))
     }
 
     companion object {

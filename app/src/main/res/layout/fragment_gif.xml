@@ -5,7 +5,7 @@
     android:id="@+id/fragmentGif"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.search.pager.ui.GifFragment">
+    tools:context=".features.pager.ui.GifFragment">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -42,6 +42,18 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/gifTitleTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Happy Dancing GIF"
+                        android:textAlignment="textStart"
+                        android:textColor="?colorOnSurfaceVariant"
+                        android:textSize="15sp"
+                        android:visibility="gone" />
+
+                    <TextView
                         android:id="@+id/gifUserTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -56,17 +68,6 @@
                         android:visibility="gone"
                         app:drawableStartCompat="@drawable/compound_placeholder" />
 
-                    <TextView
-                        android:id="@+id/gifTitleTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="20dp"
-                        android:text="Happy Dancing GIF"
-                        android:textAlignment="textStart"
-                        android:textColor="?colorOnSurfaceVariant"
-                        android:textSize="15sp"
-                        android:visibility="gone" />
 
                 </LinearLayout>
 

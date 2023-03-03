@@ -7,6 +7,6 @@ import ru.kekulta.giphyapp.features.list.domain.models.PaginationState
 
 
 interface PaginationInteractor {
-    fun observePaginationState(): Flow<PaginationState>
+    fun observePaginationState(): StateFlow<PaginationState>
     fun setPaginationState(paginationState: PaginationState)
 }

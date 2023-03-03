@@ -43,7 +43,7 @@ class MainNavigator(
 
     private fun provideFragment(screen: String, args: Bundle?): Fragment {
         return when (screen) {
-            "list/details" -> GifPagerFragment.newInstance(args)
+            "list/details" -> GifPagerFragment()
             "list" -> GifListFragment()
             else -> throw IllegalArgumentException("Invalid screen")
         }

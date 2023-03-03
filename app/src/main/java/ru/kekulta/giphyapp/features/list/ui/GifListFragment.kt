@@ -21,7 +21,7 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
 
     private val binding: FragmentListBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: GifListViewModel by viewModels({ requireActivity() }) { GifListViewModel.SearchFactory }
-    private val adapter = GifListAdapter(this).apply {
+    private val adapter = GifListAdapter().apply {
         setAdapterClickListener {
             viewModel.cardClicked(it)
         }
@@ -59,14 +59,13 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
             rv.addItemDecoration(ListItemDecoration(10))
         }
         viewModel.gifListState.observe(viewLifecycleOwner) { currentState ->
+            Log.d(LOG_TAG, "State observed: ${currentState.currentState}")
             when (currentState.currentState) {
                 GifListState.State.CONTENT -> {
-                    Log.d(LOG_TAG, "Content observe starts")
                     adapter.gifList = currentState.paginationState.gifList
                     binding.gifRecyclerView.visibility = View.VISIBLE
                     binding.info.visibility = View.INVISIBLE
                     binding.searchBar.text = currentState.query ?: ""
-                    Log.d(LOG_TAG, "Content observed")
                 }
 
                 GifListState.State.EMPTY -> {

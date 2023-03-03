@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.kekulta.giphyapp.databinding.ListItemGifBinding
 import ru.kekulta.giphyapp.shared.data.models.Gif
 
-class GifListAdapter(val fragment: Fragment) : RecyclerView.Adapter<GifListViewHolder>(),
+class GifListAdapter() : RecyclerView.Adapter<GifListViewHolder>(),
     AdapterClickListener {
     private var adapterClickListener: AdapterClickListener? = null
     var gifList: List<Gif> = listOf()

@@ -3,39 +3,52 @@ package ru.kekulta.giphyapp.features.pager.ui
 import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.viewpager.widget.ViewPager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.FragmentPagerGifBinding
 import ru.kekulta.giphyapp.di.MainServiceLocator
+import ru.kekulta.giphyapp.features.list.domain.api.PaginationInteractor
+import ru.kekulta.giphyapp.features.pager.domain.presentation.GifPagerViewModel
 import ru.kekulta.giphyapp.shared.data.models.Gif
 import ru.kekulta.giphyapp.shared.navigation.api.Command
 
 class
-GifPagerFragment : Fragment(R.layout.fragment_pager_gif) {
+GifPagerFragment :
+    Fragment(R.layout.fragment_pager_gif) {
     private val binding: FragmentPagerGifBinding by viewBinding(createMethod = CreateMethod.INFLATE)
-    private val adapter by lazy {
-        GifPagerAdapter(this).apply {
-            items = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                arguments?.getParcelableArray(GIF_LIST, Gif::class.java)?.toList() ?: emptyList()
-            } else {
-                arguments?.getParcelableArray(GIF_LIST)?.map { it as Gif } ?: emptyList()
-            }
-        }
-    }
+    private val adapter by lazy { GifPagerAdapter(this) }
     private val viewPager by lazy { binding.viewPager }
+    private val viewModel: GifPagerViewModel by viewModels({ requireActivity() }) { GifPagerViewModel.SearchFactory }
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
+
         viewPager.adapter = adapter
         viewPager.currentItem = arguments?.getInt(INITIAL_ITEM) ?: 0
+
+        viewModel.gifPagerState.observe(viewLifecycleOwner) { state ->
+
+            adapter.items = state.paginationState.gifList
+            Log.d(LOG_TAG, "observed : ${state.paginationState.currentItem}")
+            viewPager.currentItem = state.paginationState.currentItem
+            binding.counter.text = resources.getString(
+                R.string.page_counter_format,
+                (state.paginationState.currentItem + 1),
+                state.paginationState.gifList.size
+            )
+        }
+
+
 
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
@@ -47,11 +60,8 @@ GifPagerFragment : Fragment(R.layout.fragment_pager_gif) {
             }
 
             override fun onPageSelected(position: Int) {
-                binding.counter.text = resources.getString(
-                    R.string.page_counter_format,
-                    (position + 1),
-                    adapter.items.size
-                )
+                Log.d(LOG_TAG, position.toString())
+                viewModel.pageChanged(position)
             }
         })
 
