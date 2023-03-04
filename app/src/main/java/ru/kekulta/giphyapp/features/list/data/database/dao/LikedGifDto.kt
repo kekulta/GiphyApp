@@ -1,9 +1,6 @@
 package ru.kekulta.giphyapp.features.list.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import ru.kekulta.giphyapp.features.list.data.dto.GifLikedDto
 
@@ -35,6 +32,6 @@ interface GifLikedDao {
     )
     suspend fun deleteById(id: String)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(dto: GifLikedDto)
 }

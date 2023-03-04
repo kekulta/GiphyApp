@@ -34,15 +34,11 @@ class GifListAdapter() : RecyclerView.Adapter<GifListViewHolder>(),
         adapterClickListener?.onClick(adapterPosition)
     }
 
-    fun setAdapterClickListener(adapterClickListener: AdapterClickListener?) {
-        this.adapterClickListener = adapterClickListener
+    override fun onLikeClick(adapterPosition: Int) {
+        adapterClickListener?.onLikeClick(adapterPosition)
     }
 
-    fun setAdapterClickListener(adapterClickListener: (Int) -> (Unit)) {
-        this.adapterClickListener = object : AdapterClickListener {
-            override fun onClick(adapterPosition: Int) {
-                adapterClickListener(adapterPosition)
-            }
-        }
+    fun setAdapterClickListener(adapterClickListener: AdapterClickListener?) {
+        this.adapterClickListener = adapterClickListener
     }
 }

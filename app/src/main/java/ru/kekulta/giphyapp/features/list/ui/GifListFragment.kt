@@ -22,9 +22,16 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
     private val binding: FragmentListBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: GifListViewModel by viewModels({ requireActivity() }) { GifListViewModel.SearchFactory }
     private val adapter = GifListAdapter().apply {
-        setAdapterClickListener {
-            viewModel.cardClicked(it)
-        }
+        setAdapterClickListener (object : AdapterClickListener {
+            override fun onClick(adapterPosition: Int) {
+                viewModel.cardClicked(adapterPosition)
+            }
+
+            override fun onLikeClick(adapterPosition: Int) {
+                viewModel.cardBookmarkClicked(adapterPosition)
+            }
+
+        })
     }
 
     override fun onCreateView(
@@ -76,7 +83,7 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
                     binding.pageCounter.text = getString(
                         R.string.page_counter_format,
                         currentState.paginationState.currentPage,
-                        currentState.paginationState.pagesTotal
+                        currentState.paginationState.pagesTotal - 1
                     )
                     binding.backButton.isEnabled = currentState.paginationState.currentPage != 1
                     binding.forwardButton.isEnabled =

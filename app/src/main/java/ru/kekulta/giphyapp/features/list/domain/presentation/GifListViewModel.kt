@@ -5,12 +5,10 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.di.MainServiceLocator
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchRequest
 import ru.kekulta.giphyapp.features.list.domain.api.GifInteractor
-import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
 import ru.kekulta.giphyapp.features.pager.domain.api.PaginationInteractor
 import ru.kekulta.giphyapp.features.list.domain.models.GifListState
 import ru.kekulta.giphyapp.features.pager.domain.models.PaginationState
@@ -129,6 +127,18 @@ class GifListViewModel(
 
     fun nextPageButtonClicked() {
         fetchGifsByQuery(gifListStateValue.query ?: return, paginationState.currentPage + 1)
+    }
+
+    fun cardBookmarkClicked(adapterPosition: Int) {
+        gifListStateValue.paginationState.gifList[adapterPosition].let { gif ->
+            viewModelScope.launch(Dispatchers.IO) {
+                if (gif.liked) {
+                    gifInteractor.unlikeGif(gif.id)
+                } else {
+                    gifInteractor.likeGif(gif.id)
+                }
+            }
+        }
     }
 
     companion object {

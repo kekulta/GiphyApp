@@ -10,8 +10,7 @@ import ru.kekulta.giphyapp.shared.data.models.GifSearchResponse
 import ru.kekulta.giphyapp.shared.data.models.Resource
 
 class GifInteractorImpl(
-    private val likesRepository: LikesRepository,
-    private val gifRepository: GifRepository
+    private val likesRepository: LikesRepository, private val gifRepository: GifRepository
 ) : GifInteractor {
     override suspend fun searchGifs(request: GifSearchRequest): Flow<Resource<GifSearchResponse>> {
         val result = gifRepository.searchGifs(request)
@@ -30,5 +29,13 @@ class GifInteractorImpl(
                 }
             }
         }
+    }
+
+    override suspend fun likeGif(id: String) {
+        likesRepository.insert(id)
+    }
+
+    override suspend fun unlikeGif(id: String) {
+        likesRepository.deleteById(id)
     }
 }

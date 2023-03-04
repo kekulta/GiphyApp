@@ -7,4 +7,6 @@ import ru.kekulta.giphyapp.shared.data.models.Resource
 
 interface GifInteractor {
     suspend fun searchGifs(request: GifSearchRequest): Flow<Resource<GifSearchResponse>>
+    suspend fun likeGif(id: String)
+    suspend fun unlikeGif(id: String)
 }

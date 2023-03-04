@@ -14,11 +14,12 @@ import ru.kekulta.giphyapp.databinding.ListItemGifBinding
 import ru.kekulta.giphyapp.shared.data.models.Gif
 
 class GifListViewHolder(
-    private val binding: ListItemGifBinding, onClickListener: AdapterClickListener
+    private val binding: ListItemGifBinding, val onClickListener: AdapterClickListener
 ) :
     RecyclerView.ViewHolder(binding.root) {
     init {
-        binding.root.setOnClickListener { onClickListener.onClick(adapterPosition) }
+        binding.gifCard.setOnClickListener { onClickListener.onClick(adapterPosition) }
+
     }
 
     fun onBind(gif: Gif) {
@@ -36,6 +37,11 @@ class GifListViewHolder(
             // TODO add error drawable
             .error(R.drawable.ic_launcher_background)
             .into(binding.gifIv)
+        binding.gifLikeButton.setOnCheckedChangeListener(null)
+        binding.gifLikeButton.isChecked = gif.liked
+        binding.gifLikeButton.setOnCheckedChangeListener { _, _ ->
+            onClickListener.onLikeClick(adapterPosition)
+        }
     }
 
     companion object {
