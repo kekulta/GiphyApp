@@ -18,8 +18,9 @@ class GifInteractorLikedImpl(
         if (request is GifSearchRequest.LikedRequest) {
             return likesRepository.observeCount().distinctUntilChanged()
                 .combine(
-                    likesRepository.observePage().distinctUntilChanged()
+                    likesRepository.observePage(request.page).distinctUntilChanged()
                 ) { count, page ->
+
                     val result = gifRepository.searchGifs(GifSearchRequest.IdsRequest(page, 0))
                     result.let { res ->
                         when (res) {

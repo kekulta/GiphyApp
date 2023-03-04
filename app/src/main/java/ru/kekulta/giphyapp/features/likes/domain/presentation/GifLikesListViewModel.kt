@@ -6,6 +6,8 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.di.MainServiceLocator
 import ru.kekulta.giphyapp.features.search.data.dto.GifSearchRequest
@@ -24,7 +26,7 @@ class GifLikesListViewModel(
     private val paginationInteractor: PaginationInteractor,
     private val router: Router
 ) : ViewModel() {
-
+    private var collector: Job? = null
 
     private val currentQuery = MutableLiveData<String?>(null)
 
@@ -68,18 +70,19 @@ class GifLikesListViewModel(
     }
 
     private fun fetchGifPage(page: Int = 1) {
+        collector?.cancel()
         Log.d(LOG_TAG, "Fetch by")
         state.postValue(GifListState.State.LOADING)
         Log.d(LOG_TAG, "Loading posted")
 
-        viewModelScope.launch(Dispatchers.IO) {
+        collector = viewModelScope.launch(Dispatchers.IO) {
             Log.d(LOG_TAG, "Coroutine started")
             val result =
                 gifInteractor.searchGifs(
                     GifSearchRequest.LikedRequest(page)
                 )
             Log.d(LOG_TAG, "Query returned")
-            result.collect { result ->
+            result.cancellable().collect { result ->
                 when (result) {
                     is Resource.Success -> {
                         if (result.data.gifList.isEmpty()) {
@@ -122,6 +125,7 @@ class GifLikesListViewModel(
     }
 
     fun cardBookmarkClicked(adapterPosition: Int) {
+        if (adapterPosition !in 0..gifListStateValue.paginationState.gifList.lastIndex) return
         gifListStateValue.paginationState.gifList[adapterPosition].let { gif ->
             viewModelScope.launch(Dispatchers.IO) {
                 if (gif.liked) {

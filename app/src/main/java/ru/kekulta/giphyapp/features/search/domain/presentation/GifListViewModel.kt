@@ -5,6 +5,8 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.di.MainServiceLocator
 import ru.kekulta.giphyapp.features.search.data.dto.GifSearchRequest
@@ -24,6 +26,7 @@ class GifListViewModel(
     private val router: Router
 ) : ViewModel() {
 
+    private var collector: Job? = null
 
     private val currentQuery = MutableLiveData<String?>(null)
 
@@ -47,6 +50,14 @@ class GifListViewModel(
         _gifListState.addSource(
             paginationInteractor.observePaginationState().asLiveData(Dispatchers.Main)
         ) { _state ->
+            Log.d(
+                LOG_TAG, """
+                currItem: ${_state.currentItem}
+                pagesTotal: ${_state.pagesTotal}
+                CurrPage: ${_state.currentPage}
+            """.trimIndent()
+            )
+
             _gifListState.value = gifListStateValue.copy(paginationState = _state)
 
             Log.d(LOG_TAG, "Flow observed: ${_state.gifList.size}")
@@ -67,12 +78,13 @@ class GifListViewModel(
     }
 
     private fun fetchGifsByQuery(query: String, page: Int = 1) {
+        collector?.cancel()
         Log.d(LOG_TAG, "Fetch by")
         state.postValue(GifListState.State.LOADING)
         currentQuery.postValue(query)
         Log.d(LOG_TAG, "Loading posted")
 
-        viewModelScope.launch(Dispatchers.IO) {
+        collector = viewModelScope.launch(Dispatchers.IO) {
             Log.d(LOG_TAG, "Coroutine started")
             val result =
                 gifInteractor.searchGifs(
@@ -82,7 +94,7 @@ class GifListViewModel(
                     )
                 )
             Log.d(LOG_TAG, "Query returned")
-            result.collect { result ->
+            result.cancellable().collect { result ->
                 when (result) {
                     is Resource.Success -> {
 

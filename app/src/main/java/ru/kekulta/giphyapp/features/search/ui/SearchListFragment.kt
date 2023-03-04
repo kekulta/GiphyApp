@@ -37,13 +37,6 @@ class SearchListFragment : Fragment(R.layout.fragment_list) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // TODO do something with animations
-        val animationInflater = TransitionInflater.from(context)
-//        enterTransition =
-//            animationInflater.inflateTransition(R.transition.fade).addTarget(binding.root)
-//        exitTransition = animationInflater.inflateTransition(R.transition.fade)
-//        reenterTransition =
-//            animationInflater.inflateTransition(R.transition.fade).addTarget(binding.root)
 
         binding.searchView.editText.setOnEditorActionListener { _, _, _ ->
             binding.searchBar.text = binding.searchView.text
@@ -70,7 +63,12 @@ class SearchListFragment : Fragment(R.layout.fragment_list) {
 
 
         viewModel.gifListState.observe(viewLifecycleOwner) { currentState ->
-            Log.d(LOG_TAG, "State observed: ${currentState.currentState}")
+            Log.d(LOG_TAG, """
+                |State observed: ${currentState.currentState}
+                |currentPage: ${currentState.paginationState.currentPage}
+                |pagesTotal: ${currentState.paginationState.pagesTotal}
+                |currentItem: ${currentState.paginationState.currentItem}
+            """.trimMargin())
             when (currentState.currentState) {
                 GifListState.State.CONTENT -> {
                     adapter.submitList(currentState.paginationState.gifList)
