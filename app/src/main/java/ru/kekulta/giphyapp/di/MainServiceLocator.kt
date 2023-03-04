@@ -3,13 +3,13 @@ package ru.kekulta.giphyapp.di
 
 import android.annotation.SuppressLint
 import android.content.Context
-import ru.kekulta.giphyapp.features.list.data.LikesRepository
-import ru.kekulta.giphyapp.features.list.data.NetworkClient
-import ru.kekulta.giphyapp.features.list.data.database.AppDatabase
-import ru.kekulta.giphyapp.features.list.data.network.RetrofitNetworkClient
-import ru.kekulta.giphyapp.features.list.domain.api.GifInteractor
-import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
-import ru.kekulta.giphyapp.features.list.domain.impl.GifInteractorImpl
+import ru.kekulta.giphyapp.features.search.data.LikesRepository
+import ru.kekulta.giphyapp.features.search.data.NetworkClient
+import ru.kekulta.giphyapp.features.search.data.database.AppDatabase
+import ru.kekulta.giphyapp.features.search.data.network.RetrofitNetworkClient
+import ru.kekulta.giphyapp.features.search.domain.api.GifInteractor
+import ru.kekulta.giphyapp.features.search.domain.api.GifRepository
+import ru.kekulta.giphyapp.features.search.domain.impl.GifInteractorImpl
 import ru.kekulta.giphyapp.features.pager.domain.api.PaginationInteractor
 import ru.kekulta.giphyapp.features.pager.domain.impl.PaginationInteractorImpl
 import ru.kekulta.giphyapp.shared.navigation.AppRouter
@@ -24,6 +24,7 @@ object MainServiceLocator {
     private var networkClient: NetworkClient? = null
     private var gifRepository: GifRepository? = null
     private var searchInteractor: PaginationInteractor? = null
+    private var likesInteractor: PaginationInteractor? = null
     private var router: Router? = null
 
 
@@ -52,7 +53,7 @@ object MainServiceLocator {
 
     private fun provideGifRepository(): GifRepository {
         if (gifRepository == null) {
-            gifRepository = ru.kekulta.giphyapp.features.list.data.GifRepositoryImpl(
+            gifRepository = ru.kekulta.giphyapp.features.search.data.GifRepositoryImpl(
                 provideNetworkClient()
             )
         }
@@ -85,5 +86,11 @@ object MainServiceLocator {
             searchInteractor = PaginationInteractorImpl()
         }
         return searchInteractor!!
+    }
+    fun provideLikesInteractor(): PaginationInteractor {
+        if (likesInteractor == null) {
+            likesInteractor = PaginationInteractorImpl()
+        }
+        return likesInteractor!!
     }
 }

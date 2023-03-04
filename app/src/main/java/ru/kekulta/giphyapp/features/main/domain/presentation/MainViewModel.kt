@@ -9,7 +9,7 @@ import ru.kekulta.giphyapp.shared.navigation.api.Command
 import ru.kekulta.giphyapp.shared.navigation.api.Navigator
 import ru.kekulta.giphyapp.shared.navigation.api.Router
 
-class MainViewModel(val router: Router) : ViewModel() {
+class MainViewModel(private val router: Router) : ViewModel() {
 
     private var initialized = false
 
@@ -17,7 +17,7 @@ class MainViewModel(val router: Router) : ViewModel() {
         router.attachNavigator(navigator)
         if (!initialized) {
             initialized = true
-            router.navigate(Command.CommandForwardTo("Initial", "list"))
+            router.navigate(Command.CommandForwardTo("Initial", "search"))
         }
     }
 
@@ -27,6 +27,14 @@ class MainViewModel(val router: Router) : ViewModel() {
 
     fun onPause() {
         router.detachNavigator()
+    }
+
+    fun onLikesClicked() {
+        router.navigate(Command.CommandForwardTo("Likes", "likes"))
+    }
+
+    fun onSearchClicked() {
+        router.navigate(Command.CommandForwardTo("Search", "search"))
     }
 
     companion object {

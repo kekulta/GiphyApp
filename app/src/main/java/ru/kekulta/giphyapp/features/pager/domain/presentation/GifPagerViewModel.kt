@@ -34,11 +34,19 @@ class GifPagerViewModel(private val paginationInteractor: PaginationInteractor) 
 
     companion object {
         const val LOG_TAG = "GifPagerViewModel"
-
+        const val SEARCH_KEY = "SEARCH_FACTORY_PRODUCER"
+        const val LIKES_KEY = "LIKES_FACTORY_PRODUCER"
         val SearchFactory = viewModelFactory {
             initializer {
                 GifPagerViewModel(
                     MainServiceLocator.provideSearchInteractor()
+                )
+            }
+        }
+        val LikesFactory = viewModelFactory {
+            initializer {
+                GifPagerViewModel(
+                    MainServiceLocator.provideLikesInteractor()
                 )
             }
         }

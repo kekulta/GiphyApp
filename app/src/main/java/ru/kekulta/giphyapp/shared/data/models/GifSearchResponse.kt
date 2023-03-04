@@ -1,6 +1,6 @@
 package ru.kekulta.giphyapp.shared.data.models
 
-import ru.kekulta.giphyapp.features.list.data.dto.Response
+import ru.kekulta.giphyapp.features.search.data.dto.Response
 
 
 

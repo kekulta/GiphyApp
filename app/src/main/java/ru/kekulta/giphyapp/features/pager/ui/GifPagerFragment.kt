@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -17,13 +18,20 @@ import ru.kekulta.giphyapp.di.MainServiceLocator
 import ru.kekulta.giphyapp.features.pager.domain.presentation.GifPagerViewModel
 import ru.kekulta.giphyapp.shared.navigation.api.Command
 
-class
-GifPagerFragment :
+class GifPagerFragment :
     Fragment(R.layout.fragment_pager_gif) {
     private val binding: FragmentPagerGifBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val adapter by lazy { GifPagerAdapter(this) }
     private val viewPager by lazy { binding.viewPager }
-    private val viewModel: GifPagerViewModel by viewModels({ requireActivity() }) { GifPagerViewModel.SearchFactory }
+    private val viewModel: GifPagerViewModel by lazy {
+        val key = arguments?.getString(FACTORY_PRODUCER)
+        val factory = when (key) {
+            GifPagerViewModel.SEARCH_KEY -> GifPagerViewModel.SearchFactory
+            GifPagerViewModel.LIKES_KEY -> GifPagerViewModel.LikesFactory
+            else -> throw java.lang.IllegalArgumentException()
+        }
+        ViewModelProvider(requireActivity(), factory)[key, GifPagerViewModel::class.java]
+    }
 
 
     override fun onCreateView(
@@ -93,7 +101,7 @@ GifPagerFragment :
 
     companion object {
         const val LOG_TAG = "GifPagerFragment"
-        const val GIF_LIST = "arg_items"
+        const val FACTORY_PRODUCER = "arg_items"
         const val INITIAL_ITEM = "arg_initial"
 
         @JvmStatic

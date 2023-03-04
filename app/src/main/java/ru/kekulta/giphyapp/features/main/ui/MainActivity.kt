@@ -26,11 +26,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                   viewModel.onBackPressed()
+                    viewModel.onBackPressed()
                 }
             }
         )
 
+        binding.likesButton.setOnClickListener {
+            viewModel.onLikesClicked()
+        }
+        binding.searchButton.setOnClickListener {
+            viewModel.onSearchClicked()
+        }
     }
 
     override fun onResume() {
