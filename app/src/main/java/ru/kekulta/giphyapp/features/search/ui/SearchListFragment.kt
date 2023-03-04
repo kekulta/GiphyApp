@@ -22,7 +22,7 @@ class SearchListFragment : Fragment(R.layout.fragment_list) {
     private val binding: FragmentListBinding by viewBinding(createMethod = CreateMethod.INFLATE)
     private val viewModel: GifListViewModel by viewModels({ requireActivity() }) { GifListViewModel.Factory }
     private val adapter = GifListAdapter().apply {
-        setAdapterClickListener (object : AdapterClickListener {
+        setAdapterClickListener(object : AdapterClickListener {
             override fun onClick(adapterPosition: Int) {
                 viewModel.cardClicked(adapterPosition)
             }
@@ -73,7 +73,7 @@ class SearchListFragment : Fragment(R.layout.fragment_list) {
             Log.d(LOG_TAG, "State observed: ${currentState.currentState}")
             when (currentState.currentState) {
                 GifListState.State.CONTENT -> {
-                    adapter.gifList = currentState.paginationState.gifList
+                    adapter.submitList(currentState.paginationState.gifList)
                     binding.gifRecyclerView.visibility = View.VISIBLE
                     binding.backButton.visibility = View.VISIBLE
                     binding.forwardButton.visibility = View.VISIBLE

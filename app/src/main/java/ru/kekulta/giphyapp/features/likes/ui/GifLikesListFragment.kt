@@ -68,7 +68,7 @@ class GifLikesListFragment : Fragment(R.layout.fragment_list_likes) {
             Log.d(LOG_TAG, "State observed: ${currentState.currentState}")
             when (currentState.currentState) {
                 GifListState.State.CONTENT -> {
-                    adapter.gifList = currentState.paginationState.gifList
+                    adapter.submitList(currentState.paginationState.gifList)
                     binding.gifRecyclerView.visibility = View.VISIBLE
                     binding.backButton.visibility = View.VISIBLE
                     binding.forwardButton.visibility = View.VISIBLE

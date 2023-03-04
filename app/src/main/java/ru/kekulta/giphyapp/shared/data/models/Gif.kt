@@ -1,6 +1,8 @@
 package ru.kekulta.giphyapp.shared.data.models
 
 import android.os.Parcelable
+import androidx.recyclerview.widget.DiffUtil
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 
@@ -16,4 +18,16 @@ data class Gif(
     val title: String?,
     val contentDescription: String?,
     val liked: Boolean = false
-) : Parcelable
+) : Parcelable {
+    companion object {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Gif>() {
+            override fun areItemsTheSame(oldItem: Gif, newItem: Gif): Boolean =
+                oldItem.id == newItem.id
+
+
+            override fun areContentsTheSame(oldItem: Gif, newItem: Gif): Boolean =
+                oldItem.id == newItem.id && oldItem.liked == newItem.liked
+
+        }
+    }
+}

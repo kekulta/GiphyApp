@@ -17,7 +17,9 @@ class GifInteractorLikedImpl(
     override suspend fun searchGifs(request: GifSearchRequest): Flow<Resource<GifSearchResponse>> {
         if (request is GifSearchRequest.LikedRequest) {
             return likesRepository.observeCount().distinctUntilChanged()
-                .combine(likesRepository.observePage().distinctUntilChanged()) { count, page ->
+                .combine(
+                    likesRepository.observePage().distinctUntilChanged()
+                ) { count, page ->
                     val result = gifRepository.searchGifs(GifSearchRequest.IdsRequest(page, 0))
                     result.let { res ->
                         when (res) {
@@ -25,7 +27,7 @@ class GifInteractorLikedImpl(
                             is Resource.Success -> {
                                 val pagination = Pagination(
                                     request.page,
-                                    res.data.gifList.size / ITEMS_ON_PAGE + if (res.data.gifList.size % ITEMS_ON_PAGE > 0) 1 else 0,
+                                    count / ITEMS_ON_PAGE + if (count % ITEMS_ON_PAGE > 0) 1 else 0,
                                 )
                                 val listLikeable = res.data.gifList.map { gif ->
                                     gif.copy(liked = true)
