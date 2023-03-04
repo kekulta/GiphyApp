@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,9 +34,6 @@ import ru.kekulta.giphyapp.databinding.FragmentGifBinding
 import ru.kekulta.giphyapp.shared.data.models.Gif
 import ru.kekulta.goodjobray.shared.data.utils.dp
 import java.io.*
-import java.nio.ByteBuffer
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
 
 
 private const val ARG_GIF = "param1"
@@ -92,22 +90,22 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
                 ): Boolean {
 
                     binding.gifShareButton.setOnClickListener {
-                        val byteBuffer = (binding.image.drawable as GifDrawable).buffer
                         lifecycleScope.launch(Dispatchers.IO) {
 
 
                             val gifFile =
-                                Glide.with(requireContext()).asFile().load(gif!!.urlPreview)
+                                Glide.with(requireContext()).asFile()
+                                    .load(gif?.urlDownsized ?: gif?.urlOriginal)
                                     .submit().get()
-
-                            val secondFile = File(requireContext().filesDir, "${gif?.title ?: "giphy"}.gif")
-
-
-                            gifFile.copyTo(secondFile, true)
 
 
                             val uri: Uri =
-                                getUriForFile(requireContext(), "ru.kekulta.provider", secondFile)
+                                getUriForFile(
+                                    requireContext(),
+                                    "ru.kekulta.provider",
+                                    gifFile,
+                                    "${gif?.title ?: "giphy"}.gif"
+                                )
 
 
                             val shareIntent: Intent = Intent().apply {
@@ -141,12 +139,21 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
                             resource: Bitmap,
                             transition: Transition<in Bitmap?>?
                         ) {
-                            binding.gifUserTv.setCompoundDrawablesWithIntrinsicBounds(
-                                BitmapDrawable(binding.gifUserTv.resources, resource),
-                                null,
-                                null,
-                                null
-                            )
+                            try {
+                                binding.gifUserTv.setCompoundDrawablesWithIntrinsicBounds(
+                                    BitmapDrawable(binding.gifUserTv.resources, resource),
+                                    null,
+                                    null,
+                                    null
+                                )
+                            } catch (e: java.lang.IllegalStateException) {
+                                Log.e(
+                                    LOG_TAG,
+                                    "Tried to set compound drawable to currently removed page",
+                                    e
+                                )
+                            }
+
                         }
 
                         override fun onLoadCleared(placeholder: Drawable?) {

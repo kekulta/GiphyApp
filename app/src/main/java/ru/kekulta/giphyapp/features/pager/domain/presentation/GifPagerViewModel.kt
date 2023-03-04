@@ -8,9 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.kekulta.giphyapp.di.MainServiceLocator
-import ru.kekulta.giphyapp.features.list.domain.api.PaginationInteractor
-import ru.kekulta.giphyapp.features.list.domain.models.PaginationState
-import ru.kekulta.giphyapp.features.list.domain.presentation.GifListViewModel
+import ru.kekulta.giphyapp.features.pager.domain.api.PaginationInteractor
 import ru.kekulta.giphyapp.features.pager.domain.models.GifPagerState
 
 class GifPagerViewModel(private val paginationInteractor: PaginationInteractor) : ViewModel() {

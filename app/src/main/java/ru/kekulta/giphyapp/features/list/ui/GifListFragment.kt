@@ -76,7 +76,7 @@ class GifListFragment : Fragment(R.layout.fragment_list) {
                     binding.pageCounter.text = getString(
                         R.string.page_counter_format,
                         currentState.paginationState.currentPage,
-                        currentState.paginationState.pagesTotal - 1
+                        currentState.paginationState.pagesTotal
                     )
                     binding.backButton.isEnabled = currentState.paginationState.currentPage != 1
                     binding.forwardButton.isEnabled =

@@ -9,17 +9,19 @@ import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.di.MainServiceLocator
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchRequest
 import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
-import ru.kekulta.giphyapp.features.list.domain.api.PaginationInteractor
+import ru.kekulta.giphyapp.features.pager.domain.api.PaginationInteractor
 import ru.kekulta.giphyapp.features.list.domain.models.GifListState
-import ru.kekulta.giphyapp.features.list.domain.models.PaginationState
-import ru.kekulta.giphyapp.features.list.domain.models.PaginationState.Companion.ITEMS_ON_PAGE
+import ru.kekulta.giphyapp.features.pager.domain.models.PaginationState
+import ru.kekulta.giphyapp.features.pager.domain.models.PaginationState.Companion.ITEMS_ON_PAGE
 
 import ru.kekulta.giphyapp.shared.data.models.Resource
 import ru.kekulta.giphyapp.shared.navigation.api.Command
+import ru.kekulta.giphyapp.shared.navigation.api.Router
 
 class GifListViewModel(
     private val gifRepository: GifRepository,
-    private val paginationInteractor: PaginationInteractor
+    private val paginationInteractor: PaginationInteractor,
+    private val router: Router
 ) : ViewModel() {
 
 
@@ -84,13 +86,7 @@ class GifListViewModel(
                 is Resource.Success -> {
 
 
-                    val currentPage =
-                        (result.data.pagination.count + result.data.pagination.offset) / ITEMS_ON_PAGE +
-                                if ((result.data.pagination.count + result.data.pagination.offset) % ITEMS_ON_PAGE > 0) 1 else 0
-                    val pagesTotal =
-                        (result.data.pagination.totalCount) / ITEMS_ON_PAGE +
-                                if ((result.data.pagination.totalCount) % ITEMS_ON_PAGE > 0) 1 else 0
-                    if (result.data.pagination.count == 0) {
+                    if (result.data.gifList.isEmpty()) {
                         state.postValue(GifListState.State.EMPTY)
                     }
 
@@ -99,18 +95,9 @@ class GifListViewModel(
                             result.data.gifList,
                             0,
                             ITEMS_ON_PAGE,
-                            pagesTotal,
-                            currentPage
+                            result.data.pagination.pagesTotal,
+                            result.data.pagination.currentPage
                         )
-                    )
-                    Log.d(
-                        LOG_TAG, """
-                        offset: ${result.data.pagination.offset}
-                        count: ${result.data.pagination.count}
-                        countTotal: ${result.data.pagination.totalCount}
-                        currentPage: $currentPage
-                        pagesTotal: $pagesTotal
-                    """.trimIndent()
                     )
 
                 }
@@ -129,7 +116,7 @@ class GifListViewModel(
     fun cardClicked(adapterPosition: Int) {
         paginationInteractor.setPaginationState(paginationState.copy(currentItem = adapterPosition))
 
-        MainServiceLocator.getRouter()
+        router
             .navigate(Command.CommandForwardTo("Details", "list/details"))
     }
 
@@ -148,7 +135,8 @@ class GifListViewModel(
             initializer {
                 GifListViewModel(
                     MainServiceLocator.provideGifRepository(),
-                    MainServiceLocator.provideSearchInteractor()
+                    MainServiceLocator.provideSearchInteractor(),
+                    MainServiceLocator.provideRouter()
                 )
             }
         }

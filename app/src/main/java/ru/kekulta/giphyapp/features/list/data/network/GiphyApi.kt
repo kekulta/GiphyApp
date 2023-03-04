@@ -4,7 +4,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchResponseDto
-import ru.kekulta.giphyapp.features.list.domain.models.PaginationState.Companion.ITEMS_ON_PAGE
+import ru.kekulta.giphyapp.features.pager.domain.models.PaginationState.Companion.ITEMS_ON_PAGE
 
 
 interface GiphyApi {

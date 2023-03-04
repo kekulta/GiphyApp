@@ -1,6 +1,5 @@
 package ru.kekulta.giphyapp.features.pager.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
@@ -15,9 +14,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.FragmentPagerGifBinding
 import ru.kekulta.giphyapp.di.MainServiceLocator
-import ru.kekulta.giphyapp.features.list.domain.api.PaginationInteractor
 import ru.kekulta.giphyapp.features.pager.domain.presentation.GifPagerViewModel
-import ru.kekulta.giphyapp.shared.data.models.Gif
 import ru.kekulta.giphyapp.shared.navigation.api.Command
 
 class
@@ -71,7 +68,7 @@ GifPagerFragment :
         returnTransition = transitionInflater.inflateTransition(R.transition.slide_bottom)
 
         binding.backButton.setOnClickListener {
-            MainServiceLocator.getRouter().navigate(Command.CommandBack)
+            MainServiceLocator.provideRouter().navigate(Command.CommandBack)
         }
 
         return binding.root

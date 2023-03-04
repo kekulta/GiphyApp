@@ -1,17 +1,21 @@
 package ru.kekulta.giphyapp.features.list.data
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchRequest
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchResponseDto
 import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
+import ru.kekulta.giphyapp.features.list.domain.models.GifListState
+import ru.kekulta.giphyapp.features.list.domain.presentation.GifListViewModel
+import ru.kekulta.giphyapp.features.pager.domain.models.PaginationState
 
 
 import ru.kekulta.giphyapp.shared.data.models.*
 import ru.kekulta.giphyapp.shared.utils.HTTTPCodes
 
 
-class GifRepositoryImpl(private val networkClient: ru.kekulta.giphyapp.features.list.data.NetworkClient) :
+class GifRepositoryImpl(private val networkClient: NetworkClient) :
     GifRepository {
     override suspend fun searchGifs(request: GifSearchRequest): Resource<GifSearchResponse> {
 
@@ -54,11 +58,29 @@ class GifRepositoryImpl(private val networkClient: ru.kekulta.giphyapp.features.
                         contentDescription = gifDto.contentDescription
                     )
                 }
+
+                val currentPage =
+                    (response.pagination.count + response.pagination.offset) / PaginationState.ITEMS_ON_PAGE +
+                            if ((response.pagination.count + response.pagination.offset) % PaginationState.ITEMS_ON_PAGE > 0) 1 else 0
+                val pagesTotal =
+                    (response.pagination.totalCount) / PaginationState.ITEMS_ON_PAGE +
+                            if ((response.pagination.totalCount) % PaginationState.ITEMS_ON_PAGE > 0) 1 else 0
+
+
                 val pagination = Pagination(
-                    response.pagination.offset,
-                    response.pagination.totalCount,
-                    response.pagination.count
+                    currentPage, pagesTotal
                 )
+
+                Log.d(
+                    GifListViewModel.LOG_TAG, """
+                        offset: ${response.pagination.offset}
+                        count: ${response.pagination.count}
+                        countTotal: ${response.pagination.totalCount}
+                        currentPage: $currentPage
+                        pagesTotal: $pagesTotal
+                    """.trimIndent()
+                )
+
                 result = GifSearchResponse(data, pagination)
             }
         }

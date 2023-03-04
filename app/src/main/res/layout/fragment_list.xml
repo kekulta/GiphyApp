@@ -27,46 +27,47 @@
                     android:layout_width="match_parent"
                     android:layout_height="80dp" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/gifRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false" />
+
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <Button
-                        android:visibility="gone"
                         android:id="@+id/backButton"
                         style="?attr/materialIconButtonFilledStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:layout_marginStart="40dp"
-                        app:icon="@drawable/arrow_back" />
-                    <TextView
                         android:visibility="gone"
+                        app:icon="@drawable/arrow_back" />
+
+                    <TextView
+                        android:id="@+id/pageCounter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:text="@string/page_counter_placeholder"
                         android:textSize="28sp"
-                        android:id="@+id/pageCounter"
-                        android:text="@string/page_counter_placeholder"/>
+                        android:visibility="gone" />
 
                     <Button
-                        android:visibility="gone"
                         android:id="@+id/forwardButton"
                         style="?attr/materialIconButtonFilledStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_marginEnd="40dp"
+                        android:visibility="gone"
                         app:icon="@drawable/arrow_forward" />
 
                 </FrameLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/gifRecyclerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
 

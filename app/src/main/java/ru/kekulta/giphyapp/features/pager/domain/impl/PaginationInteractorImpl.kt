@@ -1,11 +1,10 @@
-package ru.kekulta.giphyapp.features.list.domain.impl
+package ru.kekulta.giphyapp.features.pager.domain.impl
 
 import android.util.Log
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import ru.kekulta.giphyapp.features.list.domain.api.PaginationInteractor
-import ru.kekulta.giphyapp.features.list.domain.models.PaginationState
+import ru.kekulta.giphyapp.features.pager.domain.api.PaginationInteractor
+import ru.kekulta.giphyapp.features.pager.domain.models.PaginationState
 
 class PaginationInteractorImpl : PaginationInteractor {
     private val _paginationState = MutableStateFlow(PaginationState())
