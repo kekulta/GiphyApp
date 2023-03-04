@@ -54,7 +54,7 @@ class GifRepositoryImpl(private val networkClient: NetworkClient) :
                         urlDownsized = urlDownsized,
                         user = user,
                         title = gifDto.title,
-                        contentDescription = gifDto.contentDescription
+                        contentDescription = gifDto.contentDescription,
                     )
                 }
 

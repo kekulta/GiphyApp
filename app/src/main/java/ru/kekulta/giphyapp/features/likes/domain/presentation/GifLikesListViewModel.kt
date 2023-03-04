@@ -76,10 +76,7 @@ class GifLikesListViewModel(
             Log.d(LOG_TAG, "Coroutine started")
             val result =
                 gifInteractor.searchGifs(
-                    GifSearchRequest(
-                        NO_REQUEST_QUERY,
-                        paginationState.itemsOnPage * (page - 1)
-                    )
+                    GifSearchRequest.LikedRequest(page)
                 )
             Log.d(LOG_TAG, "Query returned")
             result.collect { result ->
@@ -143,7 +140,7 @@ class GifLikesListViewModel(
         val Factory = viewModelFactory {
             initializer {
                 GifLikesListViewModel(
-                    MainServiceLocator.provideGifInteractor(),
+                    MainServiceLocator.provideGifLikedInteractor(),
                     MainServiceLocator.provideLikesInteractor(),
                     MainServiceLocator.provideRouter()
                 )

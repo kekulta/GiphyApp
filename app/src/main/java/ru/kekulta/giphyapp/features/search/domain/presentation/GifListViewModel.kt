@@ -76,7 +76,7 @@ class GifListViewModel(
             Log.d(LOG_TAG, "Coroutine started")
             val result =
                 gifInteractor.searchGifs(
-                    GifSearchRequest(
+                    GifSearchRequest.QueryRequest(
                         query,
                         paginationState.itemsOnPage * (page - 1)
                     )
@@ -147,7 +147,7 @@ class GifListViewModel(
         val Factory = viewModelFactory {
             initializer {
                 GifListViewModel(
-                    MainServiceLocator.provideGifInteractor(),
+                    MainServiceLocator.provideGifSearchInteractor(),
                     MainServiceLocator.provideSearchInteractor(),
                     MainServiceLocator.provideRouter()
                 )

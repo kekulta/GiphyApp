@@ -1,11 +1,11 @@
-package ru.kekulta.giphyapp.features.search.data.database
+package ru.kekulta.giphyapp.features.likes.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import ru.kekulta.giphyapp.features.search.data.database.dao.GifLikedDao
-import ru.kekulta.giphyapp.features.search.data.dto.GifLikedDto
+import ru.kekulta.giphyapp.features.likes.data.database.dao.GifLikedDao
+import ru.kekulta.giphyapp.features.likes.data.dto.GifLikedDto
 
 
 @Database(entities = [GifLikedDto::class], version = 1, exportSchema = false)

@@ -3,13 +3,15 @@ package ru.kekulta.giphyapp.di
 
 import android.annotation.SuppressLint
 import android.content.Context
-import ru.kekulta.giphyapp.features.search.data.LikesRepository
+import ru.kekulta.giphyapp.features.likes.data.LikesRepositoryImpl
 import ru.kekulta.giphyapp.features.search.data.NetworkClient
-import ru.kekulta.giphyapp.features.search.data.database.AppDatabase
+import ru.kekulta.giphyapp.features.likes.data.database.AppDatabase
+import ru.kekulta.giphyapp.features.likes.domain.api.LikesRepository
+import ru.kekulta.giphyapp.features.likes.domain.impl.GifInteractorLikedImpl
 import ru.kekulta.giphyapp.features.search.data.network.RetrofitNetworkClient
 import ru.kekulta.giphyapp.features.search.domain.api.GifInteractor
 import ru.kekulta.giphyapp.features.search.domain.api.GifRepository
-import ru.kekulta.giphyapp.features.search.domain.impl.GifInteractorImpl
+import ru.kekulta.giphyapp.features.search.domain.impl.GifInteractorSearchImpl
 import ru.kekulta.giphyapp.features.pager.domain.api.PaginationInteractor
 import ru.kekulta.giphyapp.features.pager.domain.impl.PaginationInteractorImpl
 import ru.kekulta.giphyapp.shared.navigation.AppRouter
@@ -17,7 +19,8 @@ import ru.kekulta.giphyapp.shared.navigation.api.Router
 
 @SuppressLint("StaticFieldLeak")
 object MainServiceLocator {
-    private var gifInteractor: GifInteractor? = null
+    private var gifSearchInteractor: GifInteractor? = null
+    private var gifLikedInteractor: GifInteractor? = null
     private var likesRepository: LikesRepository? = null
     private var context: Context? = null
     private var database: AppDatabase? = null
@@ -60,16 +63,22 @@ object MainServiceLocator {
         return gifRepository!!
     }
 
-    fun provideGifInteractor(): GifInteractor {
-        if (gifInteractor == null) {
-            gifInteractor = GifInteractorImpl(provideLikesRepository(), provideGifRepository())
+    fun provideGifSearchInteractor(): GifInteractor {
+        if (gifSearchInteractor == null) {
+            gifSearchInteractor = GifInteractorSearchImpl(provideLikesRepository(), provideGifRepository())
         }
-        return gifInteractor!!
+        return gifSearchInteractor!!
+    }
+    fun provideGifLikedInteractor(): GifInteractor {
+        if (gifLikedInteractor == null) {
+            gifLikedInteractor = GifInteractorLikedImpl(provideLikesRepository(), provideGifRepository())
+        }
+        return gifLikedInteractor!!
     }
 
     private fun provideLikesRepository(): LikesRepository {
         if (likesRepository == null) {
-            likesRepository = LikesRepository(provideDatabase().getGifLikedDao())
+            likesRepository = LikesRepositoryImpl(provideDatabase().getGifLikedDao())
         }
         return likesRepository!!
     }

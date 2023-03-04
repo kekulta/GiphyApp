@@ -1,8 +1,8 @@
-package ru.kekulta.giphyapp.features.search.data.database.dao
+package ru.kekulta.giphyapp.features.likes.data.database.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import ru.kekulta.giphyapp.features.search.data.dto.GifLikedDto
+import ru.kekulta.giphyapp.features.likes.data.dto.GifLikedDto
 
 @Dao
 interface GifLikedDao {
@@ -22,6 +22,25 @@ interface GifLikedDao {
         """
     )
     fun observeAll(): Flow<List<GifLikedDto>>
+
+    @Query(
+        """
+        SELECT * 
+        FROM ${GifLikedDto.TABLE}
+        ORDER BY ${GifLikedDto.MODIFY_TIME}
+        LIMIT :count
+        OFFSET :offset
+        """
+    )
+    fun observePage(count: Int, offset: Int): Flow<List<GifLikedDto>>
+
+    @Query(
+        """
+        SELECT COUNT(*) 
+        FROM ${GifLikedDto.TABLE}
+        """
+    )
+    fun observeCount(): Flow<Int>
 
     @Query(
         """

@@ -15,4 +15,9 @@ interface GiphyApi {
         @Query("limit") limit: Int = ITEMS_ON_PAGE,
         @Query("api_key") key: String = "NJhjiU6444yPb5Mwk2KAj5Do8iCVvac3",
     ): Response<GifSearchResponseDto>
+    @GET("/v1/gifs")
+    suspend fun getGifsByIds(
+        @Query("ids") ids: String,
+        @Query("api_key") key: String = "NJhjiU6444yPb5Mwk2KAj5Do8iCVvac3",
+    ): Response<GifSearchResponseDto>
 }

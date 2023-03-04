@@ -1,9 +1,9 @@
-package ru.kekulta.giphyapp.features.search.data.dto
+package ru.kekulta.giphyapp.features.likes.data.dto
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.kekulta.giphyapp.features.search.data.dto.GifLikedDto.Companion.TABLE
+import ru.kekulta.giphyapp.features.likes.data.dto.GifLikedDto.Companion.TABLE
 
 @Entity(
     tableName = TABLE
