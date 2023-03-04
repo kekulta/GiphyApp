@@ -5,9 +5,11 @@ import androidx.lifecycle.*
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.di.MainServiceLocator
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchRequest
+import ru.kekulta.giphyapp.features.list.domain.api.GifInteractor
 import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
 import ru.kekulta.giphyapp.features.pager.domain.api.PaginationInteractor
 import ru.kekulta.giphyapp.features.list.domain.models.GifListState
@@ -19,7 +21,7 @@ import ru.kekulta.giphyapp.shared.navigation.api.Command
 import ru.kekulta.giphyapp.shared.navigation.api.Router
 
 class GifListViewModel(
-    private val gifRepository: GifRepository,
+    private val gifInteractor: GifInteractor,
     private val paginationInteractor: PaginationInteractor,
     private val router: Router
 ) : ViewModel() {
@@ -75,37 +77,38 @@ class GifListViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             Log.d(LOG_TAG, "Coroutine started")
             val result =
-                gifRepository.searchGifs(
+                gifInteractor.searchGifs(
                     GifSearchRequest(
                         query,
                         paginationState.itemsOnPage * (page - 1)
                     )
                 )
             Log.d(LOG_TAG, "Query returned")
-            when (result) {
-                is Resource.Success -> {
+            result.collect { result ->
+                when (result) {
+                    is Resource.Success -> {
 
 
-                    if (result.data.gifList.isEmpty()) {
-                        state.postValue(GifListState.State.EMPTY)
-                    }
+                        if (result.data.gifList.isEmpty()) {
+                            state.postValue(GifListState.State.EMPTY)
+                        }
 
-                    paginationInteractor.setPaginationState(
-                        PaginationState(
-                            result.data.gifList,
-                            0,
-                            ITEMS_ON_PAGE,
-                            result.data.pagination.pagesTotal,
-                            result.data.pagination.currentPage
+                        paginationInteractor.setPaginationState(
+                            PaginationState(
+                                result.data.gifList,
+                                0,
+                                ITEMS_ON_PAGE,
+                                result.data.pagination.pagesTotal,
+                                result.data.pagination.currentPage
+                            )
                         )
-                    )
 
-                }
-                is Resource.Error -> {
-                    state.postValue(GifListState.State.ERROR)
+                    }
+                    is Resource.Error -> {
+                        state.postValue(GifListState.State.ERROR)
+                    }
                 }
             }
-
         }
     }
 
@@ -134,7 +137,7 @@ class GifListViewModel(
         val SearchFactory = viewModelFactory {
             initializer {
                 GifListViewModel(
-                    MainServiceLocator.provideGifRepository(),
+                    MainServiceLocator.provideGifInteractor(),
                     MainServiceLocator.provideSearchInteractor(),
                     MainServiceLocator.provideRouter()
                 )

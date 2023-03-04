@@ -21,6 +21,7 @@ interface GifLikedDao {
         """
         SELECT * 
         FROM ${GifLikedDto.TABLE}
+        ORDER BY ${GifLikedDto.MODIFY_TIME}
         """
     )
     fun observeAll(): Flow<List<GifLikedDto>>
@@ -32,8 +33,8 @@ interface GifLikedDao {
         WHERE ${GifLikedDto.ID} = :id
         """
     )
-    fun deleteById(id: String)
+    suspend fun deleteById(id: String)
 
     @Insert
-    fun insertById(dto: GifLikedDto)
+    suspend fun insert(dto: GifLikedDto)
 }

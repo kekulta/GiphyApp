@@ -3,6 +3,7 @@ package ru.kekulta.giphyapp.features.list.data
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.kekulta.giphyapp.features.list.data.database.dao.GifLikedDao
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchRequest
 import ru.kekulta.giphyapp.features.list.data.dto.GifSearchResponseDto
 import ru.kekulta.giphyapp.features.list.domain.api.GifRepository

@@ -11,7 +11,7 @@ import ru.kekulta.giphyapp.features.list.data.dto.GifLikedDto
 @Database(entities = [GifLikedDto::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun getTaskDao(): GifLikedDao
+    abstract fun getGifLikedDao(): GifLikedDao
 
 
     companion object {

@@ -3,10 +3,13 @@ package ru.kekulta.giphyapp.di
 
 import android.annotation.SuppressLint
 import android.content.Context
+import ru.kekulta.giphyapp.features.list.data.LikesRepository
 import ru.kekulta.giphyapp.features.list.data.NetworkClient
 import ru.kekulta.giphyapp.features.list.data.database.AppDatabase
 import ru.kekulta.giphyapp.features.list.data.network.RetrofitNetworkClient
+import ru.kekulta.giphyapp.features.list.domain.api.GifInteractor
 import ru.kekulta.giphyapp.features.list.domain.api.GifRepository
+import ru.kekulta.giphyapp.features.list.domain.impl.GifInteractorImpl
 import ru.kekulta.giphyapp.features.pager.domain.api.PaginationInteractor
 import ru.kekulta.giphyapp.features.pager.domain.impl.PaginationInteractorImpl
 import ru.kekulta.giphyapp.shared.navigation.AppRouter
@@ -14,6 +17,8 @@ import ru.kekulta.giphyapp.shared.navigation.api.Router
 
 @SuppressLint("StaticFieldLeak")
 object MainServiceLocator {
+    private var gifInteractor: GifInteractor? = null
+    private var likesRepository: LikesRepository? = null
     private var context: Context? = null
     private var database: AppDatabase? = null
     private var networkClient: NetworkClient? = null
@@ -33,7 +38,7 @@ object MainServiceLocator {
         return router!!
     }
 
-    fun provideDatabase(): AppDatabase {
+    private fun provideDatabase(): AppDatabase {
         context.let { context ->
             requireNotNull(context) { "DI should be initialized before accessing AppDatabase" }
             if (database == null) {
@@ -45,13 +50,27 @@ object MainServiceLocator {
         }
     }
 
-    fun provideGifRepository(): GifRepository {
+    private fun provideGifRepository(): GifRepository {
         if (gifRepository == null) {
             gifRepository = ru.kekulta.giphyapp.features.list.data.GifRepositoryImpl(
                 provideNetworkClient()
             )
         }
         return gifRepository!!
+    }
+
+    fun provideGifInteractor(): GifInteractor {
+        if (gifInteractor == null) {
+            gifInteractor = GifInteractorImpl(provideLikesRepository(), provideGifRepository())
+        }
+        return gifInteractor!!
+    }
+
+    private fun provideLikesRepository(): LikesRepository {
+        if (likesRepository == null) {
+            likesRepository = LikesRepository(provideDatabase().getGifLikedDao())
+        }
+        return likesRepository!!
     }
 
     private fun provideNetworkClient(): NetworkClient {
