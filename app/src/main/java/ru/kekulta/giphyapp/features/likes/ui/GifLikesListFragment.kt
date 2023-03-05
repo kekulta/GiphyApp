@@ -41,14 +41,6 @@ class GifLikesListFragment : Fragment(R.layout.fragment_list_likes) {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        // TODO do something with animations
-        val animationInflater = TransitionInflater.from(context)
-//        enterTransition =
-//            animationInflater.inflateTransition(R.transition.fade).addTarget(binding.root)
-//        exitTransition = animationInflater.inflateTransition(R.transition.fade)
-//        reenterTransition =
-//            animationInflater.inflateTransition(R.transition.fade).addTarget(binding.root)
-
         return binding.root
     }
 

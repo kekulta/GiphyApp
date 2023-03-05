@@ -47,15 +47,15 @@ class GifLikesListViewModel(
 
 
     init {
-        _gifListState.addSource(
-            paginationInteractor.observePaginationState().asLiveData(Dispatchers.Main)
-        ) { _state ->
-            _gifListState.value = gifListStateValue.copy(paginationState = _state)
+        viewModelScope.launch(Dispatchers.Main) {
+            paginationInteractor.observePaginationState().collect { _state ->
+                _gifListState.value = gifListStateValue.copy(paginationState = _state)
 
-            Log.d(LOG_TAG, "Flow observed: ${_state.gifList.size}")
+                Log.d(LOG_TAG, "Flow observed: ${_state.gifList.size}")
 
-            if (_state.gifList.isNotEmpty()) {
-                state.postValue(GifListState.State.CONTENT)
+                if (_state.gifList.isNotEmpty()) {
+                    state.postValue(GifListState.State.CONTENT)
+                }
             }
         }
 
@@ -92,7 +92,7 @@ class GifLikesListViewModel(
                         paginationInteractor.setPaginationState(
                             PaginationState(
                                 result.data.gifList,
-                                0,
+                                paginationState.currentItem,
                                 ITEMS_ON_PAGE,
                                 result.data.pagination.pagesTotal,
                                 result.data.pagination.currentPage

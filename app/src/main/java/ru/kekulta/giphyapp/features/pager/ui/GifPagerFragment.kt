@@ -43,11 +43,12 @@ class GifPagerFragment :
         viewPager.currentItem = arguments?.getInt(INITIAL_ITEM) ?: 0
 
         viewModel.gifPagerState.observe(viewLifecycleOwner) { state ->
-
-            adapter.items = state.paginationState.gifList
-            Log.d(LOG_TAG, "observed : ${state.paginationState.currentItem}")
-            if (viewPager.currentItem != state.paginationState.currentItem) {
-                viewPager.setCurrentItem(state.paginationState.currentItem, false)
+            binding.viewPager.post {
+                adapter.items = state.paginationState.gifList
+                Log.d(LOG_TAG, "observed : ${state.paginationState.currentItem}")
+                if (viewPager.currentItem != state.paginationState.currentItem) {
+                    viewPager.setCurrentItem(state.paginationState.currentItem, false)
+                }
             }
             binding.counter.text = resources.getString(
                 R.string.page_counter_format,
