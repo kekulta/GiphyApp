@@ -22,6 +22,10 @@ class LikesRepositoryImpl(private val dao: GifLikedDao) : LikesRepository {
         }
     }
 
+    override suspend fun isLiked(id: String): Boolean =
+        dao.isExistById(id)
+
+
     override fun observeAll(): Flow<List<String>> = dao.observeAll().map { listDto ->
         listDto.map { dto -> dto.id }
     }

@@ -11,6 +11,8 @@ interface LikesRepository {
 
     suspend fun deleteById(id: String)
 
+    suspend fun isLiked(id: String): Boolean
+
     fun observeAll(): Flow<List<String>>
 
     fun observePage(page: Int = 1): Flow<List<String>>

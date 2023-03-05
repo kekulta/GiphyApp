@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.FileProvider.getUriForFile
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -31,6 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.FragmentGifBinding
+import ru.kekulta.giphyapp.features.pager.domain.presentation.GifViewModel
 import ru.kekulta.giphyapp.shared.data.models.Gif
 import ru.kekulta.goodjobray.shared.data.utils.dp
 import java.io.*
@@ -41,7 +43,7 @@ private const val ARG_GIF = "param1"
 class GifFragment : Fragment(R.layout.fragment_gif) {
     private var gif: Gif? = null
     private val binding: FragmentGifBinding by viewBinding(createMethod = CreateMethod.INFLATE)
-
+    private val viewModel: GifViewModel by viewModels({ requireActivity() }) { GifViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -179,6 +181,13 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
                     val clip = ClipData.newPlainText("Link to gif", text)
                     clipboard.setPrimaryClip(clip)
                     Toast.makeText(requireContext(), "Link copied!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            gif?.let { gif ->
+                binding.gifLikeButton.isChecked = gif.liked
+                binding.gifLikeButton.setOnClickListener {
+                    viewModel.changeLike(gif.id)
                 }
             }
 

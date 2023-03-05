@@ -76,7 +76,7 @@ object MainServiceLocator {
         return gifLikedInteractor!!
     }
 
-    private fun provideLikesRepository(): LikesRepository {
+    fun provideLikesRepository(): LikesRepository {
         if (likesRepository == null) {
             likesRepository = LikesRepositoryImpl(provideDatabase().getGifLikedDao())
         }

@@ -95,6 +95,16 @@
                         android:visibility="gone"
                         app:icon="@drawable/copy_link"
                         app:iconTint="?colorOnSurfaceVariant" />
+
+                    <CheckBox
+                        android:id="@+id/gifLikeButton"
+                        style="@style/Widget.Material3.Button.Icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="12dp"
+                        android:button="@drawable/like_drawable"
+                        app:buttonTint="?colorOnSurfaceVariant"
+                       />
                 </LinearLayout>
 
 
