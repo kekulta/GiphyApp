@@ -63,7 +63,11 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
         val circularProgressDrawable = CircularProgressDrawable(binding.image.context)
         circularProgressDrawable.strokeWidth = 5f.dp
         circularProgressDrawable.centerRadius = 30f.dp
-        //TODO set tint
+
+        val ta = binding.root.context.theme.obtainStyledAttributes(R.styleable.ThemeColors)
+        val tint = ta.getColor(R.styleable.ThemeColors_colorPrimary, 1000)
+        circularProgressDrawable.setColorSchemeColors(tint)
+
         circularProgressDrawable.start()
 
         Glide.with(this)

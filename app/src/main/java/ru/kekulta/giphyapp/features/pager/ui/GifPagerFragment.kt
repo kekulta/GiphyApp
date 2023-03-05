@@ -86,13 +86,6 @@ class GifPagerFragment :
             (arguments?.getInt(INITIAL_ITEM) ?: 0) + 1,
             adapter.items.size
         )
-        // TODO Полезно но не нужно, убрать
-//        val ta =
-//            requireContext().theme.obtainStyledAttributes(R.styleable.ThemeColors)
-//        val c = ta.getColor(R.styleable.ThemeColors_colorSurfaceVariant, 1000)
-//
-//        requireActivity().window.statusBarColor = c
-
     }
 
     companion object {
