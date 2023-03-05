@@ -64,8 +64,7 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
 
         val ta = binding.root.context.theme.obtainStyledAttributes(R.styleable.ThemeColors)
         val colorPrimary = ta.getColor(R.styleable.ThemeColors_colorPrimary, 1000)
-        val colorSurfaceInverse = ta.getColor(R.styleable.ThemeColors_colorSurfaceInverse, 1000)
-        val colorOnSurfaceInverse = ta.getColor(R.styleable.ThemeColors_colorOnSurfaceInverse, 1000)
+
         circularProgressDrawable.setColorSchemeColors(colorPrimary)
 
         circularProgressDrawable.start()
@@ -129,8 +128,8 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
                 }
 
             })
-            // TODO add error placeholder
-            .error(R.drawable.ic_launcher_background)
+
+            .error(R.drawable.error_outline)
             .into(binding.image)
 
         gif?.let {

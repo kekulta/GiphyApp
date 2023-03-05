@@ -36,8 +36,7 @@ class GifListViewHolder(
             .load(gif.urlPreview)
             .override(gif.width, gif.height)
             .placeholder(circularProgressDrawable)
-            // TODO add error drawable
-            .error(R.drawable.ic_launcher_background)
+            .error(R.drawable.error_outline)
             .into(binding.gifIv)
         binding.gifLikeButton.setOnCheckedChangeListener(null)
         binding.gifLikeButton.isChecked = gif.liked
