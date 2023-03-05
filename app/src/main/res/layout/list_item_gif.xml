@@ -10,23 +10,32 @@
 
     app:cardCornerRadius="12dp">
 
-
-    <ImageView
-        android:id="@+id/gifIv"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@mipmap/ic_launcher" />
+        android:orientation="vertical">
 
-    <CheckBox
-        android:id="@+id/gifLikeButton"
-        style="@style/Widget.Material3.Button.Icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_margin="12dp"
-        android:layout_gravity="top|end"
-        android:button="@drawable/like_drawable"
-        app:buttonTint="?colorSurfaceVariant"
-        app:iconTint="?colorOnSurfaceVariant" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <ImageView
+                android:id="@+id/gifIv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/ic_launcher" />
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <CheckBox
+            android:id="@+id/gifLikeButton"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="6dp"
+            android:button="@drawable/like_drawable"
+            app:buttonTint="?colorOnBackground" />
+    </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
