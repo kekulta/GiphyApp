@@ -54,6 +54,7 @@ class GifLikesListViewModel(
                 Log.d(LOG_TAG, "Flow observed: ${_state.gifList.size}")
 
                 if (_state.gifList.isNotEmpty()) {
+
                     state.postValue(GifListState.State.CONTENT)
                 }
             }

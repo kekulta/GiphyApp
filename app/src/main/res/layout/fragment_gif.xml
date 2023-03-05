@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:gravity="end"
+                    android:gravity="end|center_vertical"
                     android:orientation="horizontal">
 
                     <Button
@@ -101,7 +101,7 @@
                         style="@style/Widget.Material3.Button.Icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:layout_margin="12dp"
+
                         android:button="@drawable/like_drawable"
                         app:buttonTint="?colorOnSurfaceVariant"
                        />
