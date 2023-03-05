@@ -1,5 +1,6 @@
 package ru.kekulta.giphyapp.features.likes.domain.impl
 
+import android.util.Log
 import kotlinx.coroutines.flow.*
 import ru.kekulta.giphyapp.features.likes.domain.api.LikesRepository
 import ru.kekulta.giphyapp.features.pager.domain.models.PaginationState.Companion.ITEMS_ON_PAGE
@@ -20,11 +21,19 @@ class GifInteractorLikedImpl(
                 .combine(
                     likesRepository.observePage(request.page).distinctUntilChanged()
                 ) { count, page ->
-
+                    if (page.isEmpty()) return@combine Resource.Success(
+                        GifSearchResponse(
+                            emptyList(),
+                            Pagination(1, 1)
+                        )
+                    )
                     val result = gifRepository.searchGifs(GifSearchRequest.IdsRequest(page, 0))
                     result.let { res ->
                         when (res) {
-                            is Resource.Error -> result
+                            is Resource.Error -> {
+                                Log.d(LOG_TAG, "Error with message: ${res.message}")
+                                result
+                            }
                             is Resource.Success -> {
                                 val pagination = Pagination(
                                     request.page,
@@ -53,5 +62,9 @@ class GifInteractorLikedImpl(
 
     override suspend fun unlikeGif(id: String) {
         likesRepository.deleteById(id)
+    }
+
+    companion object {
+        const val LOG_TAG = "GifInteractorLikedImlp"
     }
 }

@@ -102,6 +102,7 @@ class GifLikesListViewModel(
                     }
                     is Resource.Error -> {
                         state.postValue(GifListState.State.ERROR)
+
                     }
                 }
             }
