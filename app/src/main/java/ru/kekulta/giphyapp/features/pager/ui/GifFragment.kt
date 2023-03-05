@@ -33,7 +33,7 @@ import ru.kekulta.giphyapp.R
 import ru.kekulta.giphyapp.databinding.FragmentGifBinding
 import ru.kekulta.giphyapp.features.pager.domain.presentation.GifViewModel
 import ru.kekulta.giphyapp.shared.data.models.Gif
-import ru.kekulta.goodjobray.shared.data.utils.dp
+import ru.kekulta.giphyapp.shared.utils.dp
 
 
 private const val ARG_GIF = "param1"

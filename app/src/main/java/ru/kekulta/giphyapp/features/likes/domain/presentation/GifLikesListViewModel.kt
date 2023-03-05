@@ -83,20 +83,20 @@ class GifLikesListViewModel(
                     GifSearchRequest.LikedRequest(page)
                 )
             Log.d(LOG_TAG, "Query returned")
-            result.cancellable().collect { result ->
-                when (result) {
+            result.cancellable().collect { res ->
+                when (res) {
                     is Resource.Success -> {
-                        if (result.data.gifList.isEmpty()) {
+                        if (res.data.gifList.isEmpty()) {
                             state.postValue(GifListState.State.EMPTY)
                         }
 
                         paginationInteractor.setPaginationState(
                             PaginationState(
-                                result.data.gifList,
+                                res.data.gifList,
                                 paginationState.currentItem,
                                 ITEMS_ON_PAGE,
-                                result.data.pagination.pagesTotal,
-                                result.data.pagination.currentPage
+                                res.data.pagination.pagesTotal,
+                                res.data.pagination.currentPage
                             )
                         )
 
@@ -141,7 +141,6 @@ class GifLikesListViewModel(
 
     companion object {
         const val LOG_TAG = "GifListViewModel"
-        const val NO_REQUEST_QUERY = "no-request"
 
         val Factory = viewModelFactory {
             initializer {

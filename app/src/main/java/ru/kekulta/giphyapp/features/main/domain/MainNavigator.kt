@@ -6,12 +6,10 @@ import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
-import ru.kekulta.giphyapp.features.likes.domain.presentation.GifLikesListViewModel
 import ru.kekulta.giphyapp.features.likes.ui.GifLikesListFragment
 import ru.kekulta.giphyapp.features.pager.domain.presentation.GifPagerViewModel
-import ru.kekulta.giphyapp.features.search.ui.SearchListFragment
 import ru.kekulta.giphyapp.features.pager.ui.GifPagerFragment
-
+import ru.kekulta.giphyapp.features.search.ui.SearchListFragment
 import ru.kekulta.giphyapp.shared.navigation.api.Command
 import ru.kekulta.giphyapp.shared.navigation.api.Navigator
 

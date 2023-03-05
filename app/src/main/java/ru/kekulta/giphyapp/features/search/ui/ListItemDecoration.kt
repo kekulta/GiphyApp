@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
-import ru.kekulta.goodjobray.shared.data.utils.dp
+import ru.kekulta.giphyapp.shared.utils.dp
 
 
 class ListItemDecoration(space: Int) : ItemDecoration() {

@@ -2,7 +2,6 @@ package ru.kekulta.giphyapp.features.likes.ui
 
 
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -94,6 +93,7 @@ class GifLikesListFragment : Fragment(R.layout.fragment_list_likes) {
                     binding.info.text = when (currentState.currentState) {
                         GifListState.State.EMPTY -> "EMPTY"
                         GifListState.State.LOADING -> "LOADING"
+                        // Strange warning
                         GifListState.State.ERROR -> "ERROR"
                         GifListState.State.CONTENT -> "HERE SHOULD BE CONTENT BUT SOMETHING WENT WRONG"
                     }

@@ -1,8 +1,8 @@
 package ru.kekulta.giphyapp.features.pager.ui
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ru.kekulta.giphyapp.shared.data.models.Gif
 
@@ -12,6 +12,7 @@ class GifPagerAdapter(fragment: Fragment) :
     ) {
 
     var items: List<Gif> = emptyList()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             val diffIndex = diff(items, value)
             Log.d(LOG_TAG, "dffIndex: $diffIndex")

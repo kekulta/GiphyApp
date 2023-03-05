@@ -2,13 +2,11 @@ package ru.kekulta.giphyapp.features.search.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import ru.kekulta.giphyapp.databinding.ListItemGifBinding
 import ru.kekulta.giphyapp.shared.data.models.Gif
 
-class GifListAdapter() : ListAdapter<Gif, GifListViewHolder>(Gif.DIFF_CALLBACK),
+class GifListAdapter : ListAdapter<Gif, GifListViewHolder>(Gif.DIFF_CALLBACK),
     AdapterClickListener {
     private var adapterClickListener: AdapterClickListener? = null
 

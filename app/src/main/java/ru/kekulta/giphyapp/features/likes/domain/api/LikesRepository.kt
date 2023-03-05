@@ -1,10 +1,6 @@
 package ru.kekulta.giphyapp.features.likes.domain.api
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
-import ru.kekulta.giphyapp.features.likes.data.dto.GifLikedDto
 
 interface LikesRepository {
     suspend fun insert(id: String)

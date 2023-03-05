@@ -1,8 +1,7 @@
-package ru.kekulta.goodjobray.shared.data.utils
+package ru.kekulta.giphyapp.shared.utils
 
 import android.content.res.Resources
 import android.util.TypedValue
-import java.time.LocalDate
 
 
 val Number.dp

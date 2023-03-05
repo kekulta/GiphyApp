@@ -39,7 +39,7 @@ class AppRouter(initial: Transition? = null) : Router, BackstackProvider {
         backstack.addFirst(transition)
     }
 
-    override fun removeFromBackstack(): Transition? {
+    override fun removeFromBackstack(): Transition {
         return backstack.removeFirst()
     }
 }

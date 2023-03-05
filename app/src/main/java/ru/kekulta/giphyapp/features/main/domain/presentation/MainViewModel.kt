@@ -1,6 +1,5 @@
 package ru.kekulta.giphyapp.features.main.domain.presentation
 
-import android.text.Spannable.Factory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory

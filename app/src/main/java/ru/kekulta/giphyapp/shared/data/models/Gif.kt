@@ -2,7 +2,6 @@ package ru.kekulta.giphyapp.shared.data.models
 
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 

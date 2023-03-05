@@ -1,7 +1,6 @@
 package ru.kekulta.giphyapp.features.search.ui
 
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
@@ -10,7 +9,7 @@ import ru.kekulta.giphyapp.databinding.ListItemGifBinding
 import ru.kekulta.giphyapp.shared.data.models.Gif
 
 class GifListViewHolder(
-    private val binding: ListItemGifBinding, val onClickListener: AdapterClickListener
+    private val binding: ListItemGifBinding, private val onClickListener: AdapterClickListener
 ) :
     RecyclerView.ViewHolder(binding.root) {
     init {
