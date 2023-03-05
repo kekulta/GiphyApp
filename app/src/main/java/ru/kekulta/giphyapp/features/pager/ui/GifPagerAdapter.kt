@@ -13,8 +13,6 @@ class GifPagerAdapter(fragment: Fragment) :
 
     var items: List<Gif> = emptyList()
         set(value) {
-
-            // TODO DiffUtil
             val diffIndex = diff(items, value)
             Log.d(LOG_TAG, "dffIndex: $diffIndex")
             field = value

@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.FileProvider.getUriForFile
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -23,11 +22,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.kekulta.giphyapp.R
@@ -35,7 +34,6 @@ import ru.kekulta.giphyapp.databinding.FragmentGifBinding
 import ru.kekulta.giphyapp.features.pager.domain.presentation.GifViewModel
 import ru.kekulta.giphyapp.shared.data.models.Gif
 import ru.kekulta.goodjobray.shared.data.utils.dp
-import java.io.*
 
 
 private const val ARG_GIF = "param1"
@@ -65,8 +63,10 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
         circularProgressDrawable.centerRadius = 30f.dp
 
         val ta = binding.root.context.theme.obtainStyledAttributes(R.styleable.ThemeColors)
-        val tint = ta.getColor(R.styleable.ThemeColors_colorPrimary, 1000)
-        circularProgressDrawable.setColorSchemeColors(tint)
+        val colorPrimary = ta.getColor(R.styleable.ThemeColors_colorPrimary, 1000)
+        val colorSurfaceInverse = ta.getColor(R.styleable.ThemeColors_colorSurfaceInverse, 1000)
+        val colorOnSurfaceInverse = ta.getColor(R.styleable.ThemeColors_colorOnSurfaceInverse, 1000)
+        circularProgressDrawable.setColorSchemeColors(colorPrimary)
 
         circularProgressDrawable.start()
 
@@ -178,13 +178,25 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
             if (text != null) {
                 binding.gifLinkButton.isVisible = true
 
-                // TODO change color of toast
                 binding.gifLinkButton.setOnClickListener {
                     val clipboard =
                         requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     val clip = ClipData.newPlainText("Link to gif", text)
                     clipboard.setPrimaryClip(clip)
-                    Toast.makeText(requireContext(), "Link copied!", Toast.LENGTH_SHORT).show()
+
+
+
+                    Snackbar.make(
+                        binding.root,
+                        getString(R.string.link_copied_toast_text),
+                        Snackbar.LENGTH_SHORT
+                    ).apply {
+                        setAction("ok") {
+                            this.dismiss()
+                        }
+                        show()
+                    }
+
                 }
             }
 
@@ -198,10 +210,9 @@ class GifFragment : Fragment(R.layout.fragment_gif) {
 
         }
 
-
-
         return binding.root
     }
+
 
     companion object {
         const val LOG_TAG = "GifFragment"
