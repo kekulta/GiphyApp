@@ -84,7 +84,7 @@
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="hint" />
+                android:hint="@string/search_for_gifs" />
 
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -93,7 +93,7 @@
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="hint"
+            android:hint="@string/search_for_gifs"
             app:layout_anchor="@id/search_bar" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
