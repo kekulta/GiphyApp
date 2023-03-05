@@ -36,9 +36,12 @@ class GifPagerAdapter(fragment: Fragment) :
         return null
     }
 
+    override fun containsItem(itemId: Long): Boolean =
+        items.map { it.id.hashCode().toLong() }.contains(itemId)
+
 
     override fun getItemId(position: Int): Long {
-        return items[position].hashCode().toLong()
+        return items[position].id.hashCode().toLong()
     }
 
     override fun getItemCount(): Int {
