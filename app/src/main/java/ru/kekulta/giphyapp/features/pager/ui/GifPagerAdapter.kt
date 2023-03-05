@@ -3,13 +3,12 @@ package ru.kekulta.giphyapp.features.pager.ui
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import ru.kekulta.giphyapp.shared.data.models.Gif
 
 class GifPagerAdapter(fragment: Fragment) :
-// TODO viewpager2
-    FragmentStatePagerAdapter(
-        fragment.childFragmentManager,
-        BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+    FragmentStateAdapter(
+        fragment
     ) {
 
     var items: List<Gif> = emptyList()
@@ -20,15 +19,15 @@ class GifPagerAdapter(fragment: Fragment) :
             Log.d(LOG_TAG, "Data Set changed!")
         }
 
-    override fun getCount(): Int {
+    companion object {
+        const val LOG_TAG = "GifPagerAdapter"
+    }
+
+    override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun getItem(position: Int): Fragment {
+    override fun createFragment(position: Int): Fragment {
         return GifFragment.newInstance(items[position])
-    }
-
-    companion object {
-        const val LOG_TAG = "GifPagerAdapter"
     }
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import by.kirich1409.viewbindingdelegate.CreateMethod
 import by.kirich1409.viewbindingdelegate.viewBinding
 import ru.kekulta.giphyapp.R
@@ -45,7 +46,9 @@ class GifPagerFragment :
 
             adapter.items = state.paginationState.gifList
             Log.d(LOG_TAG, "observed : ${state.paginationState.currentItem}")
-            viewPager.currentItem = state.paginationState.currentItem
+            if (viewPager.currentItem != state.paginationState.currentItem) {
+                viewPager.setCurrentItem(state.paginationState.currentItem, false)
+            }
             binding.counter.text = resources.getString(
                 R.string.page_counter_format,
                 (state.paginationState.currentItem + 1),
@@ -54,21 +57,13 @@ class GifPagerFragment :
         }
 
 
-
-        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-            }
-
+        viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 Log.d(LOG_TAG, position.toString())
                 viewModel.pageChanged(position)
             }
         })
+
 
         val transitionInflater = TransitionInflater.from(context)
         enterTransition =
